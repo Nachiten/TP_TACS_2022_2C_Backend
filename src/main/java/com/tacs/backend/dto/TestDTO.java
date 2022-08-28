@@ -10,5 +10,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TestDTO {
-    String status;
+  String status;
 }

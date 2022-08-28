@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-    @GetMapping("/health")
-    public TestDTO health() {
-        return new TestDTO("Healthy!");
-    }
+  @GetMapping("/health")
+  public TestDTO health() {
+    return new TestDTO("Healthy!");
+  }
 }
