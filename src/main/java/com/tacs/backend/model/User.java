@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class User {
   int id;
-  int phone;
+  int phoneNumber;
   String email;
   List<Match> matchesJoined;
 }
