@@ -1,7 +1,5 @@
 package com.tacs.backend.model;
 
-import java.sql.Time;
-import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
