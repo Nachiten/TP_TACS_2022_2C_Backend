@@ -14,8 +14,8 @@ import lombok.Setter;
 @Setter
 public class Match {
   int id;
-  Date date;
-  Time time;
+  String date;
+  String time;
   String location;
   List<User> regularPlayers;
   List<User> substitutePlayers;
