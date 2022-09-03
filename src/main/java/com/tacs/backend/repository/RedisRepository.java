@@ -1,10 +1,10 @@
 package com.tacs.backend.repository;
 
 import com.tacs.backend.model.Match;
-import java.util.Map;
+import java.util.List;
 
 public interface RedisRepository {
-  Map<String, Match> findAll();
+  List<Match> findAll();
 
   Match findById(String id);
 

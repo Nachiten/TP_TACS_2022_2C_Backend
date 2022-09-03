@@ -18,7 +18,7 @@ import lombok.Setter;
 @Schema(description = "A football match")
 public class Match implements Serializable {
   @Schema(description = "Match ID")
-  int id;
+  String id;
 
   @Schema(description = "Date in which the match was created")
   LocalDateTime creationDate;

@@ -2,7 +2,7 @@ package com.tacs.backend.service;
 
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
-import java.util.Map;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class MatchService {
     matchRepository.save(match);
   }
 
-  public Map<String, Match> getMatches() {
+  public List<Match> getMatches() {
     return matchRepository.findAll();
   }
 
