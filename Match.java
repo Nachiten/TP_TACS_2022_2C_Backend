@@ -1,2 +1,3 @@
-package PACKAGE_NAME;public class Match {
-}
+package PACKAGE_NAME;
+
+public class Match {}

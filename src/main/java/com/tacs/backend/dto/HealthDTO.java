@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TestDTO {
+public class HealthDTO {
   String status;
 }

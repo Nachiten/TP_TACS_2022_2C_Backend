@@ -1,0 +1,23 @@
+server:
+  port: 3000
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: backend
+
+  devtools:
+    livereload:
+      enabled: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+  redis:
+    database: 0
+    host: localhost # Docker-compose IP
+    port: 6379
+#   password: <no password>
+#   timeout: 10000

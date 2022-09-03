@@ -1,2 +1,1 @@
-public class RedisConfiguration {
-}
+public class RedisConfiguration {}

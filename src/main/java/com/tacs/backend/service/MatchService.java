@@ -1,21 +1,28 @@
 package com.tacs.backend.service;
 
 import com.tacs.backend.model.Match;
+import com.tacs.backend.repository.MatchRepository;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MatchService {
-  public Match createMatch(Match match) {
-    System.out.println(
-        "Creating match with DATE: "
-            + match.getDate()
-            + " | TIME: "
-            + match.getTime()
-            + " | LOCATION: "
-            + match.getLocation());
+  @Autowired private MatchRepository matchRepository;
 
-    match.setId(25);
+  public void createMatch(Match match) {
+    matchRepository.save(match);
+  }
 
-    return match;
+  public Map<String, Match> getMatches() {
+    return matchRepository.findAll();
+  }
+
+  public Match getMatch(String id) {
+    return matchRepository.findById(id);
+  }
+
+  public void deleteMatch(String id) {
+    matchRepository.delete(id);
   }
 }

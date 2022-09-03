@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class User implements Serializable {
   int id;
   int phoneNumber;
   String email;
-  List<Match> matchesJoined;
+  List<Player> matchesJonined;
 }
