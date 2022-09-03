@@ -45,7 +45,9 @@ public class MatchRepository implements RedisRepository {
 
   @Override
   public Match findById(String id) {
-    return (Match) hashOperations.get(KEY, id);
+    Match match = (Match) hashOperations.get(KEY, id);
+    match.setId(id);
+    return match;
   }
 
   @Override
