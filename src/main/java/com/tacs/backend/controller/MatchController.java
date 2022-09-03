@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,34 +28,34 @@ public class MatchController {
             content = @Content)
       })
   @GetMapping()
-  public Map<String, Match> getMatches() {
+  public Iterable<Match> getMatches() {
     return matchService.getMatches();
   }
 
-  @Operation(summary = "Get a match by its id")
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Found the match",
-            content =
-                @Content(
-                    schema = @Schema(implementation = Match.class),
-                    mediaType = "application/json")),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid id supplied",
-            content = @Content()),
-        @ApiResponse(responseCode = "404", description = "match not found", content = @Content),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal server error",
-            content = @Content)
-      })
-  @GetMapping("/{id}")
-  public Match getMatch(@PathVariable String id) {
-    return matchService.getMatch(id);
-  }
+  //  @Operation(summary = "Get a match by its id")
+  //  @ApiResponses(
+  //      value = {
+  //        @ApiResponse(
+  //            responseCode = "200",
+  //            description = "Found the match",
+  //            content =
+  //                @Content(
+  //                    schema = @Schema(implementation = Match.class),
+  //                    mediaType = "application/json")),
+  //        @ApiResponse(
+  //            responseCode = "400",
+  //            description = "Invalid id supplied",
+  //            content = @Content()),
+  //        @ApiResponse(responseCode = "404", description = "match not found", content = @Content),
+  //        @ApiResponse(
+  //            responseCode = "500",
+  //            description = "Internal server error",
+  //            content = @Content)
+  //      })
+  //  @GetMapping("/{id}")
+  //  public Match getMatch(@PathVariable String id) {
+  //    return matchService.getMatch(id);
+  //  }
 
   @Operation(summary = "Create a new match")
   @ApiResponses(
@@ -80,26 +79,27 @@ public class MatchController {
     matchService.createMatch(match);
   }
 
-  @Operation(summary = "Delete a match by its id")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "204", description = "Deleted the match", content = @Content),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid id supplied",
-            content =
-                @Content(
-                    schema = @Schema(implementation = ApiErrorDTO.class),
-                    mediaType = "application/json")),
-        @ApiResponse(responseCode = "404", description = "Match not found", content = @Content),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal server error",
-            content = @Content)
-      })
-  @DeleteMapping("/{id}")
-  @ResponseStatus(code = HttpStatus.NO_CONTENT)
-  public void deleteMatch(@PathVariable String id) {
-    matchService.deleteMatch(id);
-  }
+  //  @Operation(summary = "Delete a match by its id")
+  //  @ApiResponses(
+  //      value = {
+  //        @ApiResponse(responseCode = "204", description = "Deleted the match", content =
+  // @Content),
+  //        @ApiResponse(
+  //            responseCode = "400",
+  //            description = "Invalid id supplied",
+  //            content =
+  //                @Content(
+  //                    schema = @Schema(implementation = ApiErrorDTO.class),
+  //                    mediaType = "application/json")),
+  //        @ApiResponse(responseCode = "404", description = "Match not found", content = @Content),
+  //        @ApiResponse(
+  //            responseCode = "500",
+  //            description = "Internal server error",
+  //            content = @Content)
+  //      })
+  //  @DeleteMapping("/{id}")
+  //  @ResponseStatus(code = HttpStatus.NO_CONTENT)
+  //  public void deleteMatch(@PathVariable String id) {
+  //    matchService.deleteMatch(id);
+  //  }
 }

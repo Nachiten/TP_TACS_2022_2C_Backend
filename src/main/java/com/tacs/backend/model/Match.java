@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,13 +12,16 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @AllArgsConstructor
 @Getter
 @Setter
 @Schema(description = "A football match")
+@Document
 public class Match implements Serializable {
   @Schema(description = "Match ID")
+  @Id
   int id;
 
   @Schema(description = "Date in which the match was created")

@@ -55,6 +55,11 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.redis.om</groupId>
+			<artifactId>redis-om-spring</artifactId>
+			<version>0.5.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
