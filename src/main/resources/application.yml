@@ -17,7 +17,7 @@ spring:
 
   redis:
     database: 0
-    host: localhost # Docker-compose IP
+    host: 192.168.92.4 # Docker-compose IP | Change to localhost to run without docker
     port: 6379
 #   password: <no password>
 #   timeout: 10000
