@@ -1,11 +1,11 @@
 package com.tacs.backend.service;
 
+import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 @Service
 public class MatchService {
@@ -27,7 +27,7 @@ public class MatchService {
     if (match.isPresent()) {
       return match.get();
     } else {
-      throw new NotFoundException("Match not found");
+      throw new EntityNotFoundException("Match not found");
     }
   }
 
@@ -37,7 +37,7 @@ public class MatchService {
     if (match.isPresent()) {
       matchRepository.delete(match.get());
     } else {
-      throw new RuntimeException("Match not found");
+      throw new EntityNotFoundException("Match not found");
     }
   }
 }

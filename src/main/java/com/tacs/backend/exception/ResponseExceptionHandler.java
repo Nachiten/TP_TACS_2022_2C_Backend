@@ -1,6 +1,6 @@
 package com.tacs.backend.exception;
 
-import com.tacs.backend.dto.ApiErrorDTO;
+import com.tacs.backend.dto.ExceptionDTO;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -10,44 +10,52 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.webjars.NotFoundException;
 
+@RestController
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
+  // CUSTOM exception
+  @ExceptionHandler(EntityNotFoundException.class)
+  public final ResponseEntity<ExceptionDTO> handleEntityNotFoundException(
+      EntityNotFoundException ex, WebRequest request) {
+    HttpStatus statusCode = HttpStatus.NOT_FOUND;
+
+    return generateResponseEntity(ex, statusCode, "EntityNotFoundException");
+  }
+
+  private ResponseEntity<ExceptionDTO> generateResponseEntity(
+      Exception ex, HttpStatus statusCode, String exceptionName) {
+    ex.printStackTrace();
+    ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage());
+    return new ResponseEntity<>(exceptionDTO, statusCode);
+  }
+
+  // SPRING exception
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException exception,
+      MethodArgumentNotValidException ex,
       HttpHeaders headers,
       HttpStatus status,
       WebRequest request) {
 
     HttpStatus statusCode = HttpStatus.BAD_REQUEST;
 
-    List<String> errors = getErrors(exception);
-    ApiErrorDTO apiError = new ApiErrorDTO(statusCode, exception.getMessage(), errors);
+    String errors = getErrors(ex);
 
-    return handleExceptionInternal(exception, apiError, headers, apiError.getStatus(), request);
+    return handleExceptionInternal(
+        ex,
+        new ExceptionDTO("MethodArgumentNotValidException", errors),
+        headers,
+        statusCode,
+        request);
   }
 
-  //  @ExceptionHandler(EntityNotFoundException.class)
-  //  protected ResponseEntity<Object> handleEntityNotFound(
-  //          EntityNotFoundException exception,
-  //          HttpHeaders headers,
-  //          HttpStatus status,
-  //          WebRequest request) {
-  //
-  //    HttpStatus statusCode = HttpStatus.NOT_FOUND;
-  //
-  //    List<String> errors = new ArrayList<>();
-  //    ApiErrorDTO apiError = new ApiErrorDTO(statusCode, exception.getMessage(), errors);
-  //
-  //    return new ResponseEntity<>(apiError, statusCode);
-  //  }
-
-  List<String> getErrors(MethodArgumentNotValidException exception) {
+  String getErrors(MethodArgumentNotValidException exception) {
     List<String> errors = new ArrayList<String>();
     for (FieldError error : exception.getBindingResult().getFieldErrors()) {
       errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -56,14 +64,17 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
       errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
     }
 
-    return errors;
-  }
+    // Make a string containing all the errors
+    String errorsString = "";
 
-  protected ResponseEntity<Object> handleNotFound(
-      NotFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    for (String error : errors) {
+      if (error.equals(errors.get(errors.size() - 1))) {
+        errorsString += error;
+      } else {
+        errorsString += error + ", ";
+      }
+    }
 
-    ApiErrorDTO apiError =
-        new ApiErrorDTO(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
-    return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
+    return errorsString;
   }
 }
