@@ -1,6 +1,7 @@
 package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ApiErrorDTO;
+import com.tacs.backend.dto.CreationDTO;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class MatchController {
             content = @Content)
       })
   @GetMapping()
-  public List<Match> getMatches() {
+  public Iterable<Match> getMatches() {
     return matchService.getMatches();
   }
 
@@ -75,9 +75,10 @@ public class MatchController {
             content = @Content)
       })
   @PostMapping()
-  @ResponseStatus(code = HttpStatus.CREATED)
-  public void createMatch(@Valid @RequestBody Match match) {
-    matchService.createMatch(match);
+  public CreationDTO createMatch(@Valid @RequestBody Match match) {
+    String id = matchService.createMatch(match);
+
+    return new CreationDTO(id);
   }
 
   @Operation(summary = "Delete a match by its id")

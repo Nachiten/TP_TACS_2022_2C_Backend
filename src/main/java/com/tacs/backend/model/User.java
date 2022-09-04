@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import com.redis.om.spring.annotations.Document;
 import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Document
 public class User implements Serializable {
   int id;
   int phoneNumber;

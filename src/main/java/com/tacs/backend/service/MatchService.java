@@ -2,27 +2,42 @@ package com.tacs.backend.service;
 
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
-import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 @Service
 public class MatchService {
   @Autowired private MatchRepository matchRepository;
 
-  public void createMatch(Match match) {
-    matchRepository.save(match);
+  public String createMatch(Match match) {
+    Match createdMath = matchRepository.save(match);
+
+    return createdMath.getId();
   }
 
-  public List<Match> getMatches() {
+  public Iterable<Match> getMatches() {
     return matchRepository.findAll();
   }
 
   public Match getMatch(String id) {
-    return matchRepository.findById(id);
+    Optional<Match> match = matchRepository.findById(id);
+
+    if (match.isPresent()) {
+      return match.get();
+    } else {
+      throw new NotFoundException("Match not found");
+    }
   }
 
   public void deleteMatch(String id) {
-    matchRepository.delete(id);
+    Optional<Match> match = matchRepository.findById(id);
+
+    if (match.isPresent()) {
+      matchRepository.delete(match.get());
+    } else {
+      throw new RuntimeException("Match not found");
+    }
   }
 }
