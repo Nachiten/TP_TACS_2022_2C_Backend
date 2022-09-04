@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "A user playing on a match")
+@Document
 public class Player implements Serializable {
   @Schema(description = "Player Id")
   int id;
