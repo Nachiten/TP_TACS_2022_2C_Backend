@@ -2,6 +2,7 @@ package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.CreationDTO;
 import com.tacs.backend.dto.ExceptionDTO;
+import com.tacs.backend.dto.StatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.service.MatchService;
@@ -137,5 +138,21 @@ public class MatchController {
   @ResponseStatus(code = HttpStatus.NO_CONTENT)
   public void deleteMatch(@PathVariable String id) {
     matchService.deleteMatch(id);
+  }
+
+  @Operation(summary = "Get statistics from the last two hours of all games")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok",
+            content =
+                @Content(
+                    schema = @Schema(implementation = StatisticsDTO.class),
+                    mediaType = "application/json"))
+      })
+  @GetMapping("/statistics")
+  public StatisticsDTO getStatistics() {
+    return matchService.getStatistics();
   }
 }
