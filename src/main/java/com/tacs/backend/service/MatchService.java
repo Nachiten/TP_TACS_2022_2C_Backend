@@ -6,7 +6,6 @@ import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,19 +45,17 @@ public class MatchService {
   }
 
   public StatisticsDTO getStatistics() {
-    //    int numberOfGames = 0;
-    //    LocalDateTime now = LocalDateTime.now().minusHours(2);
-    //
-    //    for (Match match : getMatches()) {
-    //      if (match.getCreationDate().isAfter(now)) {
-    //        numberOfGames++;
-    //      }
-    //    }
+    int hoursAgo = 2;
 
-    Stream<Match> stream =
-        StreamSupport.stream(matchRepository.findAll().spliterator(), false)
-            .filter(match -> match.getCreationDate().isAfter(LocalDateTime.now().minusHours(2)));
+    // Get the count of matches created in the last two hours
+    int matchesCreated =
+        (int)
+            StreamSupport.stream(matchRepository.findAll().spliterator(), false)
+                .filter(
+                    match ->
+                        match.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
+                .count();
 
-    return new StatisticsDTO((int) stream.count());
+    return new StatisticsDTO(matchesCreated);
   }
 }
