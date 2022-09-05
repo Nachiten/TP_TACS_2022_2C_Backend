@@ -1,6 +1,7 @@
 package com.tacs.backend.service;
 
 import com.tacs.backend.dto.StatisticsDTO;
+import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
@@ -14,10 +15,13 @@ import org.springframework.stereotype.Service;
 public class MatchService {
   @Autowired private MatchRepository matchRepository;
 
-  public String createMatch(Match match) {
-    Match createdMath = matchRepository.save(match);
+  public String createMatch(MatchCreationDTO match) {
+    Match newMatch =
+        new Match(match.getLocation(), match.getStartingDate(), match.getStartingTime());
 
-    return createdMath.getId();
+    Match createdMatch = matchRepository.save(newMatch);
+
+    return createdMatch.getId();
   }
 
   public Iterable<Match> getMatches() {

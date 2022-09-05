@@ -98,17 +98,8 @@ public class MatchController {
             description = "Internal server error",
             content = @Content)
       })
-  // This line can NOT be simplified, as the name (Swagger) collides with the same name in
-  // SpringBoot
-  @io.swagger.v3.oas.annotations.parameters.RequestBody(
-      description = "Match to create",
-      required = true,
-      content =
-          @Content(
-              schema = @Schema(implementation = MatchCreationDTO.class),
-              mediaType = "application/json"))
   @PostMapping()
-  public CreationDTO createMatch(@Valid @RequestBody Match match) {
+  public CreationDTO createMatch(@Valid @RequestBody MatchCreationDTO match) {
     String id = matchService.createMatch(match);
 
     return new CreationDTO(id);

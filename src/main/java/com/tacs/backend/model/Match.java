@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
-@AllArgsConstructor
 @Getter
 @Setter
 @Schema(description = "A football match")
@@ -44,5 +42,13 @@ public class Match implements Serializable {
   public Match() {
     this.players = new ArrayList<>();
     this.creationDate = LocalDateTime.now();
+  }
+
+  public Match(String location, LocalDate startingDate, LocalDateTime startingTime) {
+    this.players = new ArrayList<>();
+    this.creationDate = LocalDateTime.now();
+    this.location = location;
+    this.startingDate = startingDate;
+    this.startingTime = startingTime;
   }
 }
