@@ -56,7 +56,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   String getErrors(MethodArgumentNotValidException exception) {
-    List<String> errors = new ArrayList<String>();
+    List<String> errors = new ArrayList<>();
     for (FieldError error : exception.getBindingResult().getFieldErrors()) {
       errors.add(error.getField() + ": " + error.getDefaultMessage());
     }

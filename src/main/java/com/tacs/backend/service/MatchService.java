@@ -1,8 +1,10 @@
 package com.tacs.backend.service;
 
+import com.tacs.backend.dto.StatisticsDTO;
 import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +41,18 @@ public class MatchService {
     } else {
       throw new EntityNotFoundException("Match not found");
     }
+  }
+
+  public StatisticsDTO getStatistics() {
+    int numberOfGames = 0;
+    LocalDateTime now = LocalDateTime.now().minusHours(2);
+
+    for (Match match : getMatches()) {
+      if (match.getCreationDate().isAfter(now)) {
+        numberOfGames++;
+      }
+    }
+
+    return new StatisticsDTO(numberOfGames);
   }
 }

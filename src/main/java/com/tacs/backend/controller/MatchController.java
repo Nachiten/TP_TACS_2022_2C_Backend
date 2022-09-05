@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/matches")
 public class MatchController {
@@ -110,21 +108,16 @@ public class MatchController {
   @Operation(summary = "Get statistics from the last two hours of all games")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "Ok", content = @Content)
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok",
+            content =
+                @Content(
+                    schema = @Schema(implementation = StatisticsDTO.class),
+                    mediaType = "application/json"))
       })
-
   @GetMapping("/statistics")
   public StatisticsDTO getStatistics() {
-    int numberOfGames = 0;
-    LocalDateTime now = LocalDateTime.now().minusHours(2);
-
-    for (Match match : matchService.getMatches()) {
-      if(match.getCreationDate().isAfter(now)) {
-        numberOfGames++;
-      }
-    }
-
-    return new StatisticsDTO(numberOfGames);
+    return matchService.getStatistics();
   }
-
 }
