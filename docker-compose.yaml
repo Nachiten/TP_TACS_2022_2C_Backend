@@ -1,14 +1,14 @@
 version: '3'
 services:
   angular_front:
-    image: tacs-frontend
+    image: tacs2c2022grupo2/tacs-frontend
     ports:
     - 4200:80
     networks:
       tacs_network:
         ipv4_address: 192.168.92.3
   java_back:
-    image: tacs-backend
+    image: tacs2c2022grupo2/tacs-backend
     ports:
     - 3000:3000
     networks:
