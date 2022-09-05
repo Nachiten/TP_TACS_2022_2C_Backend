@@ -2,6 +2,7 @@ package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ApiErrorDTO;
 import com.tacs.backend.dto.CreationDTO;
+import com.tacs.backend.dto.StatisticsDTO;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Iterator;
 
 @RestController
 @RequestMapping("/matches")
@@ -103,4 +107,27 @@ public class MatchController {
   public void deleteMatch(@PathVariable String id) {
     matchService.deleteMatch(id);
   }
+  /////--STATICS
+  @Operation(summary = "Get statistics from the last two hours of all games")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "200", description = "Ok", content = @Content)
+      })
+
+  @GetMapping("/statistics")
+  public StatisticsDTO getStatistics() {
+    int numberOfGames = 0;
+    int numberOfPlayers = 0;
+    LocalDateTime now = LocalDateTime.now().minusHours(2);
+
+    for (Match match : matchService.getMatches()) {
+      if(match.getCreationDate().isAfter(now)) {
+        numberOfGames++;
+        numberOfPlayers += match.getPlayers().size();
+      }
+    }
+
+    return new StatisticsDTO(numberOfGames, numberOfPlayers);
+  }
+
 }
