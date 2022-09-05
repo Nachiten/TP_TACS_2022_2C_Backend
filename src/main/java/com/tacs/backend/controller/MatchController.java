@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
 
 @RestController
 @RequestMapping("/matches")
@@ -107,7 +106,7 @@ public class MatchController {
   public void deleteMatch(@PathVariable String id) {
     matchService.deleteMatch(id);
   }
-  /////--STATICS
+
   @Operation(summary = "Get statistics from the last two hours of all games")
   @ApiResponses(
       value = {
@@ -117,17 +116,15 @@ public class MatchController {
   @GetMapping("/statistics")
   public StatisticsDTO getStatistics() {
     int numberOfGames = 0;
-    int numberOfPlayers = 0;
     LocalDateTime now = LocalDateTime.now().minusHours(2);
 
     for (Match match : matchService.getMatches()) {
       if(match.getCreationDate().isAfter(now)) {
         numberOfGames++;
-        numberOfPlayers += match.getPlayers().size();
       }
     }
 
-    return new StatisticsDTO(numberOfGames, numberOfPlayers);
+    return new StatisticsDTO(numberOfGames);
   }
 
 }

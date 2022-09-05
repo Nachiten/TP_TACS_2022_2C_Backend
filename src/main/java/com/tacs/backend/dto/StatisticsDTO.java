@@ -11,5 +11,4 @@ import lombok.Setter;
 @Setter
 public class StatisticsDTO {
   int numberOfGames;
-  int numberOfPlayers;
 }
