@@ -18,12 +18,12 @@ public class Player implements Serializable {
   @Schema(description = "Player Id")
   int id;
 
-  @Schema(description = "Match in which the player will play")
+  @Schema(description = "Match in which the player will play", required = true)
   int matchId;
 
-  @Schema(description = "User associated to the player")
+  @Schema(description = "User associated to the player", required = true)
   int userId;
 
-  @Schema(description = "Is the player regular or substitute")
+  @Schema(description = "Is the player regular or substitute", required = true)
   boolean isRegular;
 }

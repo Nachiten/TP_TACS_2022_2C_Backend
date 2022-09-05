@@ -1,5 +1,6 @@
 package com.tacs.backend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Schema(description = "System exception")
 public class ExceptionDTO {
-  private String error;
+  @Schema(description = "Exception name")
+  private String exceptionName;
+
+  @Schema(description = "Exception message")
   private String message;
 }
