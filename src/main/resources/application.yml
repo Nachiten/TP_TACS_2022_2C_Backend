@@ -16,7 +16,7 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
 
   redis:
-    host: localhost # Docker-compose IP | change to localhost to run locally
+    host: 192.168.92.4 # Docker-compose IP | change to localhost to run locally
     port: 6379
 #   password: <no password>
 #   timeout: 10000
