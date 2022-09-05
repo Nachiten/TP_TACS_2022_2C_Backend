@@ -37,7 +37,7 @@ public class MatchController {
             description = "Internal server error",
             content = @Content())
       })
-  @GetMapping()
+  @GetMapping("/all")
   public Iterable<Match> getMatches() {
     return matchService.getMatches();
   }
