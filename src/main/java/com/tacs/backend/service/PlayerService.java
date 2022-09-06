@@ -1,5 +1,6 @@
 package com.tacs.backend.service;
 
+import com.tacs.backend.dto.StatisticsPlayerDTO;
 import com.tacs.backend.dto.creation.PlayerCreationDTO;
 import com.tacs.backend.exception.ConflictException;
 import com.tacs.backend.exception.EntityNotFoundException;
@@ -9,7 +10,11 @@ import com.tacs.backend.model.User;
 import com.tacs.backend.repository.MatchRepository;
 import com.tacs.backend.repository.PlayerRepository;
 import com.tacs.backend.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,4 +106,21 @@ public class PlayerService {
       throw new ConflictException("Match with id " + match.getId() + " is full");
     }
   }
+
+  public StatisticsPlayerDTO getPlayersStatics() {
+    int hoursAgo = 2;
+
+    // Get the count of players registered in the last two hours
+    int playersRegistered  =
+            (int)
+                    StreamSupport.stream(playerRepository.findAll().spliterator(), false)
+                            .filter(
+                                    player ->
+                                            player.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
+                            .count();
+
+    return new StatisticsPlayerDTO(playersRegistered);
+  }
+
+
 }
