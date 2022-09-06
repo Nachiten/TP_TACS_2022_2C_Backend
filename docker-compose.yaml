@@ -1,0 +1,29 @@
+version: '3'
+services:
+  angular_front:
+    image: tacs2c2022grupo2/tacs-frontend
+    ports:
+    - 4200:80
+    networks:
+      tacs_network:
+        ipv4_address: 192.168.92.3
+  java_back:
+    image: tacs2c2022grupo2/tacs-backend
+    ports:
+    - 3000:3000
+    networks:
+      tacs_network:
+        ipv4_address: 192.168.92.2
+  redis_db:
+    image: redis/redis-stack
+    ports:
+    - 6379:6379
+    networks:
+      tacs_network:
+        ipv4_address: 192.168.92.4
+networks:
+  tacs_network:
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.92.0/24
