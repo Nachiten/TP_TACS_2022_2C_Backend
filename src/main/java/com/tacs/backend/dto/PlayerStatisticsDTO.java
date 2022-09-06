@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Provided when an object is created")
-public class CreationDTO {
-  @Schema(description = "Created object ID")
-  String id;
+@Getter
+@Setter
+@Schema(description = "Players statistics")
+public class PlayerStatisticsDTO {
+  @Schema(description = "Number of players enrolled in the last two hours")
+  int playersEnrolled;
 }

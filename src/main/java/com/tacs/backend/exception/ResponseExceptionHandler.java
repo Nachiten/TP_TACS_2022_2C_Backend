@@ -19,20 +19,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
-  // CUSTOM exception
+  // --- CUSTOM exceptions ---
   @ExceptionHandler(EntityNotFoundException.class)
   public final ResponseEntity<ExceptionDTO> handleEntityNotFoundException(
-      EntityNotFoundException ex, WebRequest request) {
+      EntityNotFoundException ex) {
     HttpStatus statusCode = HttpStatus.NOT_FOUND;
 
     return generateResponseEntity(ex, statusCode, "EntityNotFoundException");
   }
 
-  private ResponseEntity<ExceptionDTO> generateResponseEntity(
-      Exception ex, HttpStatus statusCode, String exceptionName) {
-    ex.printStackTrace();
-    ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage());
-    return new ResponseEntity<>(exceptionDTO, statusCode);
+  @ExceptionHandler(ConflictException.class)
+  public final ResponseEntity<ExceptionDTO> handleConflictException(ConflictException ex) {
+    HttpStatus statusCode = HttpStatus.CONFLICT;
+
+    return generateResponseEntity(ex, statusCode, "ConflictException");
   }
 
   // SPRING exception
@@ -55,7 +55,9 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         request);
   }
 
-  String getErrors(MethodArgumentNotValidException exception) {
+  // --- UTILS ---
+
+  private String getErrors(MethodArgumentNotValidException exception) {
     List<String> errors = new ArrayList<>();
     for (FieldError error : exception.getBindingResult().getFieldErrors()) {
       errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -65,16 +67,23 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // Make a string containing all the errors
-    String errorsString = "";
+    StringBuilder errorsString = new StringBuilder();
 
     for (String error : errors) {
       if (error.equals(errors.get(errors.size() - 1))) {
-        errorsString += error;
+        errorsString.append(error);
       } else {
-        errorsString += error + ", ";
+        errorsString.append(error).append(", ");
       }
     }
 
-    return errorsString;
+    return errorsString.toString();
+  }
+
+  private ResponseEntity<ExceptionDTO> generateResponseEntity(
+      Exception ex, HttpStatus statusCode, String exceptionName) {
+    ex.printStackTrace();
+    ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage());
+    return new ResponseEntity<>(exceptionDTO, statusCode);
   }
 }
