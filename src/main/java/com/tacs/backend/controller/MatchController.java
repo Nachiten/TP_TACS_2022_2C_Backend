@@ -1,6 +1,6 @@
 package com.tacs.backend.controller;
 
-import com.tacs.backend.dto.CreationDTO;
+import com.tacs.backend.dto.creation.CreatedDTO;
 import com.tacs.backend.dto.ExceptionDTO;
 import com.tacs.backend.dto.StatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
@@ -84,7 +84,7 @@ public class MatchController {
             description = "Created",
             content =
                 @Content(
-                    schema = @Schema(implementation = CreationDTO.class),
+                    schema = @Schema(implementation = CreatedDTO.class),
                     mediaType = "application/json")),
         @ApiResponse(
             responseCode = "400",
@@ -99,10 +99,10 @@ public class MatchController {
             content = @Content)
       })
   @PostMapping()
-  public CreationDTO createMatch(@Valid @RequestBody MatchCreationDTO match) {
+  public CreatedDTO createMatch(@Valid @RequestBody MatchCreationDTO match) {
     String id = matchService.createMatch(match);
 
-    return new CreationDTO(id);
+    return new CreatedDTO(id);
   }
 
   @Operation(summary = "Delete a match by its id")

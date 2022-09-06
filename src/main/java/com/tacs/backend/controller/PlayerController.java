@@ -1,6 +1,7 @@
 package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ExceptionDTO;
+import com.tacs.backend.dto.creation.PlayerCreationDTO;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +38,7 @@ public class PlayerController {
       })
   @PostMapping()
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Player createPlayer(@Valid @RequestBody Player player) {
+  public Player createPlayer(@Valid @RequestBody PlayerCreationDTO player) {
     return playerService.createPlayer(player);
   }
 }

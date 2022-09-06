@@ -15,7 +15,12 @@ import lombok.Setter;
 @Document
 public class User implements Serializable {
   String id;
-  int phoneNumber;
+  String phoneNumber;
   String email;
   List<Player> matchesJonined;
+
+  public User(String phoneNumber, String email) {
+    this.phoneNumber = phoneNumber;
+    this.email = email;
+  }
 }

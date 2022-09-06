@@ -20,13 +20,17 @@ public class Player implements Serializable {
   String id;
 
   @Schema(description = "Match in which the player will play", required = true)
-  @NotNull
   String matchId;
 
   @Schema(description = "User associated to the player", required = true)
-  @NotNull
   String userId;
 
   @Schema(description = "Is the player regular or substitute", required = true)
   boolean isRegular;
+
+  public Player(String matchId, String userId, boolean isRegular) {
+    this.matchId = matchId;
+    this.userId = userId;
+    this.isRegular = isRegular;
+  }
 }
