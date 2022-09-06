@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Matches statistics")
-public class StatisticsDTO {
-  @Schema(description = "Number of games created in the last two hours")
-  int gamesCreated;
+public class MatchesStatisticsDTO {
+  @Schema(description = "Number of matches created in the last two hours")
+  int matchesCreated;
 }

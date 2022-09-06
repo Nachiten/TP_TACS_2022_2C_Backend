@@ -7,12 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotNull;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 @NoArgsConstructor
@@ -21,9 +16,10 @@ import org.springframework.data.annotation.Id;
 @Setter
 @Schema(description = "A football match")
 @Document
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Match implements Serializable {
-  @Schema(description = "Match ID")
   @Id
+  @Schema(description = "Match ID")
   String id;
 
   @Schema(description = "Date in which the match was created")

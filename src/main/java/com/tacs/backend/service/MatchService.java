@@ -1,6 +1,6 @@
 package com.tacs.backend.service;
 
-import com.tacs.backend.dto.StatisticsDTO;
+import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
@@ -15,13 +15,11 @@ import org.springframework.stereotype.Service;
 public class MatchService {
   @Autowired private MatchRepository matchRepository;
 
-  public String createMatch(MatchCreationDTO match) {
+  public Match createMatch(MatchCreationDTO match) {
     Match newMatch =
         new Match(match.getLocation(), match.getStartingDate(), match.getStartingTime());
 
-    Match createdMatch = matchRepository.save(newMatch);
-
-    return createdMatch.getId();
+    return matchRepository.save(newMatch);
   }
 
   public Iterable<Match> getMatches() {
@@ -31,24 +29,24 @@ public class MatchService {
   public Match getMatch(String id) {
     Optional<Match> match = matchRepository.findById(id);
 
-    if (match.isPresent()) {
-      return match.get();
-    } else {
+    if (match.isEmpty()) {
       throw new EntityNotFoundException("Match not found");
     }
+
+    return match.get();
   }
 
   public void deleteMatch(String id) {
     Optional<Match> match = matchRepository.findById(id);
 
-    if (match.isPresent()) {
-      matchRepository.delete(match.get());
-    } else {
+    if (match.isEmpty()) {
       throw new EntityNotFoundException("Match not found");
     }
+
+    matchRepository.delete(match.get());
   }
 
-  public StatisticsDTO getStatistics() {
+  public MatchesStatisticsDTO getStatistics() {
     int hoursAgo = 2;
 
     // Get the count of matches created in the last two hours
@@ -60,9 +58,6 @@ public class MatchService {
                         match.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
                 .count();
 
-    return new StatisticsDTO(matchesCreated);
+    return new MatchesStatisticsDTO(matchesCreated);
   }
-
-
-
 }

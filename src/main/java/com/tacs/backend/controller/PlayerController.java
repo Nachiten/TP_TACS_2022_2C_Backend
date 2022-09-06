@@ -1,8 +1,8 @@
 package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ExceptionDTO;
+import com.tacs.backend.dto.PlayerStatisticsDTO;
 import com.tacs.backend.dto.creation.PlayerCreationDTO;
-import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ public class PlayerController {
             description = "Found the players",
             content =
                 @Content(
-                    array = @ArraySchema(schema = @Schema(implementation = Match.class)),
+                    array = @ArraySchema(schema = @Schema(implementation = Player.class)),
                     mediaType = "application/json")),
         @ApiResponse(
             responseCode = "500",
@@ -44,7 +44,13 @@ public class PlayerController {
   @Operation(summary = "Create a new player")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "Created", content = @Content),
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content =
+                @Content(
+                    schema = @Schema(implementation = Player.class),
+                    mediaType = "application/json")),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid body",
@@ -52,7 +58,6 @@ public class PlayerController {
                 @Content(
                     schema = @Schema(implementation = ExceptionDTO.class),
                     mediaType = "application/json")),
-        @ApiResponse(responseCode = "405", description = "Method-Not-Allow", content = @Content),
         @ApiResponse(
             responseCode = "500",
             description = "Internal server error",
@@ -62,5 +67,25 @@ public class PlayerController {
   @ResponseStatus(code = HttpStatus.CREATED)
   public Player createPlayer(@Valid @RequestBody PlayerCreationDTO player) {
     return playerService.createPlayer(player);
+  }
+
+  @Operation(summary = "Get the amount of players enrolled in the last two hours")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok",
+            content =
+                @Content(
+                    schema = @Schema(implementation = PlayerStatisticsDTO.class),
+                    mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = @Content)
+      })
+  @GetMapping("/statistics")
+  public PlayerStatisticsDTO getStatistics() {
+    return playerService.getStatistics();
   }
 }

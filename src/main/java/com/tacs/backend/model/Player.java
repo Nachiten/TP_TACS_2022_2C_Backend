@@ -4,18 +4,18 @@ import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Schema(description = "A user playing on a match")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Document
 public class Player implements Serializable {
+  @Id
   @Schema(description = "Player Id")
   String id;
 

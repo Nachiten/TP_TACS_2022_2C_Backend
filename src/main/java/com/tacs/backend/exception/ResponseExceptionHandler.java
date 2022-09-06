@@ -29,8 +29,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(ConflictException.class)
-  public final ResponseEntity<ExceptionDTO> handleConflictException(
-          ConflictException ex) {
+  public final ResponseEntity<ExceptionDTO> handleConflictException(ConflictException ex) {
     HttpStatus statusCode = HttpStatus.CONFLICT;
 
     return generateResponseEntity(ex, statusCode, "ConflictException");
@@ -82,7 +81,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   private ResponseEntity<ExceptionDTO> generateResponseEntity(
-          Exception ex, HttpStatus statusCode, String exceptionName) {
+      Exception ex, HttpStatus statusCode, String exceptionName) {
     ex.printStackTrace();
     ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage());
     return new ResponseEntity<>(exceptionDTO, statusCode);

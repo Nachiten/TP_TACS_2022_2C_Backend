@@ -22,7 +22,13 @@ public class UserController {
   @Operation(summary = "Create a new user")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "Created", content = @Content),
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content =
+                @Content(
+                    schema = @Schema(implementation = User.class),
+                    mediaType = "application/json")),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid body",
@@ -30,7 +36,6 @@ public class UserController {
                 @Content(
                     schema = @Schema(implementation = ExceptionDTO.class),
                     mediaType = "application/json")),
-        @ApiResponse(responseCode = "405", description = "Method-Not-Allow", content = @Content),
         @ApiResponse(
             responseCode = "500",
             description = "Internal server error",

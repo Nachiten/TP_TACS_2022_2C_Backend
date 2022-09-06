@@ -1,8 +1,7 @@
 package com.tacs.backend.controller;
 
-import com.tacs.backend.dto.creation.CreatedDTO;
 import com.tacs.backend.dto.ExceptionDTO;
-import com.tacs.backend.dto.StatisticsDTO;
+import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.service.MatchService;
@@ -84,7 +83,7 @@ public class MatchController {
             description = "Created",
             content =
                 @Content(
-                    schema = @Schema(implementation = CreatedDTO.class),
+                    schema = @Schema(implementation = Match.class),
                     mediaType = "application/json")),
         @ApiResponse(
             responseCode = "400",
@@ -99,10 +98,8 @@ public class MatchController {
             content = @Content)
       })
   @PostMapping()
-  public CreatedDTO createMatch(@Valid @RequestBody MatchCreationDTO match) {
-    String id = matchService.createMatch(match);
-
-    return new CreatedDTO(id);
+  public Match createMatch(@Valid @RequestBody MatchCreationDTO match) {
+    return matchService.createMatch(match);
   }
 
   @Operation(summary = "Delete a match by its id")
@@ -131,7 +128,7 @@ public class MatchController {
     matchService.deleteMatch(id);
   }
 
-  @Operation(summary = "Get statistics from the last two hours of all games")
+  @Operation(summary = "Get the amount of matches created in the last two hours")
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -139,11 +136,11 @@ public class MatchController {
             description = "Ok",
             content =
                 @Content(
-                    schema = @Schema(implementation = StatisticsDTO.class),
+                    schema = @Schema(implementation = MatchesStatisticsDTO.class),
                     mediaType = "application/json"))
       })
   @GetMapping("/statistics")
-  public StatisticsDTO getStatistics() {
+  public MatchesStatisticsDTO getStatistics() {
     return matchService.getStatistics();
   }
 }

@@ -1,6 +1,6 @@
 package com.tacs.backend.service;
 
-import com.tacs.backend.dto.StatisticsPlayerDTO;
+import com.tacs.backend.dto.PlayerStatisticsDTO;
 import com.tacs.backend.dto.creation.PlayerCreationDTO;
 import com.tacs.backend.exception.ConflictException;
 import com.tacs.backend.exception.EntityNotFoundException;
@@ -10,11 +10,9 @@ import com.tacs.backend.model.User;
 import com.tacs.backend.repository.MatchRepository;
 import com.tacs.backend.repository.PlayerRepository;
 import com.tacs.backend.repository.UserRepository;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +27,11 @@ public class PlayerService {
 
     Match match = getMatch(playerCreation.getMatchId());
 
-    System.out.println("Match found...");
-
     boolean regularPlayer = getPlayerIsRegular(match);
 
-    System.out.println("Regular player");
-
-    Player newPlayer = getPlayer(playerCreation, regularPlayer);
-
-    System.out.println("Get player");
+    Player newPlayer = generateNewPlayer(playerCreation, regularPlayer);
 
     match.getPlayers().add(newPlayer);
-
     matchRepository.save(match);
 
     return playerRepository.save(newPlayer);
@@ -50,10 +41,7 @@ public class PlayerService {
     return playerRepository.findAll();
   }
 
-  private Player getPlayer(PlayerCreationDTO playerCreation, boolean isRegular) {
-    // Get user with email
-    // Optional<User> user = userRepository.findByEmail(playerCreation.getUserEmail());
-
+  private Player generateNewPlayer(PlayerCreationDTO playerCreation, boolean isRegular) {
     Iterable<User> user = userRepository.findAll();
 
     // TODO - Horrible code, correct
@@ -68,15 +56,11 @@ public class PlayerService {
     }
 
     if (userFound != null) {
-      System.out.println("User found, using...");
-
       // If player with email exists, use it
       String existingUserId = userFound.getId();
 
       return new Player(playerCreation.getMatchId(), existingUserId, isRegular);
     } else {
-      System.out.println("User not found, creating...");
-
       // If player with email does not exist, create it
       User newUser = new User(playerCreation.getUserPhoneNumber(), playerCreation.getUserEmail());
       String createdUserId = userRepository.save(newUser).getId();
@@ -107,20 +91,28 @@ public class PlayerService {
     }
   }
 
-  public StatisticsPlayerDTO getPlayersStatics() {
+  public Player getPlayer(String id) {
+    Optional<Player> player = playerRepository.findById(id);
+
+    if (player.isEmpty()) {
+      throw new EntityNotFoundException("Match not found");
+    }
+
+    return player.get();
+  }
+
+  public PlayerStatisticsDTO getStatistics() {
     int hoursAgo = 2;
 
     // Get the count of players registered in the last two hours
-    int playersRegistered  =
-            (int)
-                    StreamSupport.stream(playerRepository.findAll().spliterator(), false)
-                            .filter(
-                                    player ->
-                                            player.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
-                            .count();
+    int playersRegistered =
+        (int)
+            StreamSupport.stream(playerRepository.findAll().spliterator(), false)
+                .filter(
+                    player ->
+                        player.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
+                .count();
 
-    return new StatisticsPlayerDTO(playersRegistered);
+    return new PlayerStatisticsDTO(playersRegistered);
   }
-
-
 }
