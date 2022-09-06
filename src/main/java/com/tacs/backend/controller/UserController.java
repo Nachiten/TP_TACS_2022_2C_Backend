@@ -1,12 +1,10 @@
 package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ExceptionDTO;
-import com.tacs.backend.dto.creation.PlayerCreationDTO;
-import com.tacs.backend.model.Match;
-import com.tacs.backend.model.Player;
-import com.tacs.backend.service.PlayerService;
+import com.tacs.backend.dto.creation.UserCreationDTO;
+import com.tacs.backend.model.User;
+import com.tacs.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,31 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/players")
-public class PlayerController {
-  @Autowired PlayerService playerService;
+@RequestMapping("/users")
+public class UserController {
+  @Autowired UserService userService;
 
-  @Operation(summary = "Get all players")
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Found the players",
-            content =
-                @Content(
-                    array = @ArraySchema(schema = @Schema(implementation = Match.class)),
-                    mediaType = "application/json")),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal server error",
-            content = @Content())
-      })
-  @GetMapping()
-  public Iterable<Player> getPlayers() {
-    return playerService.getPlayers();
-  }
-
-  @Operation(summary = "Create a new player")
+  @Operation(summary = "Create a new user")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "201", description = "Created", content = @Content),
@@ -60,7 +38,7 @@ public class PlayerController {
       })
   @PostMapping()
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Player createPlayer(@Valid @RequestBody PlayerCreationDTO player) {
-    return playerService.createPlayer(player);
+  public User createUser(@Valid @RequestBody UserCreationDTO user) {
+    return userService.createUser(user);
   }
 }
