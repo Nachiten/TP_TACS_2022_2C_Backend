@@ -19,7 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
-  // --- CUSTOM exceptions ---
+  // --- CUSTOM exceptions --
+
   @ExceptionHandler(EntityNotFoundException.class)
   public final ResponseEntity<ExceptionDTO> handleEntityNotFoundException(
       EntityNotFoundException ex) {
@@ -35,7 +36,8 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     return generateResponseEntity(ex, statusCode, "ConflictException");
   }
 
-  // SPRING exception
+  // --- SPRING exceptions ---
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException ex,

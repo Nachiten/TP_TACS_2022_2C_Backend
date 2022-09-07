@@ -31,15 +31,18 @@ class BackendApplicationTests {
   static int matchesBefore, playersBefore;
 
   @Test
-  void _0_initial_setup() {
+  void _0_get_statistics_before_tests() {
     assertNotNull(matchService);
     assertNotNull(playerService);
 
-    matchesBefore = (int) matchService.getMatches().spliterator().getExactSizeIfKnown();
-    playersBefore = (int) playerService.getPlayers().spliterator().getExactSizeIfKnown();
+    PlayerStatisticsDTO playerStatistics = playerService.getStatistics();
+    MatchesStatisticsDTO matchStatistics = matchService.getStatistics();
 
-    System.out.println("The DB has " + matchesBefore + " matches already stored");
-    System.out.println("The DB has " + playersBefore + " players already stored");
+    matchesBefore = matchStatistics.getMatchesCreated();
+    playersBefore = playerStatistics.getPlayersEnrolled();
+
+    System.out.println("Matches before tests: " + matchesBefore);
+    System.out.println("Players before tests: " + playersBefore);
   }
 
   @Test
@@ -120,14 +123,14 @@ class BackendApplicationTests {
   }
 
   @Test
-  void _5_get_player_statistics() {
+  void _5_get_player_statistics_after_tests() {
     PlayerStatisticsDTO playerStatistics = playerService.getStatistics();
 
     assertEquals(playersBefore + 9, playerStatistics.getPlayersEnrolled());
   }
 
   @Test
-  void _6_get_match_statistics() {
+  void _6_get_match_statistics_after_tests() {
     MatchesStatisticsDTO match = matchService.getStatistics();
 
     assertEquals(matchesBefore + 3, match.getMatchesCreated());
