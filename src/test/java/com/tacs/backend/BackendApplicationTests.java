@@ -27,7 +27,7 @@ class BackendApplicationTests {
 
   static Match match1, match2, match3;
   static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
-  static int matchesBefore, playersBefore;
+  static int matchesStatsBefore, playersStatsBefore;
 
   static int hours = 2;
 
@@ -39,11 +39,11 @@ class BackendApplicationTests {
     PlayerStatisticsDTO playerStatistics = playerService.getStatistics(hours);
     MatchesStatisticsDTO matchStatistics = matchService.getMatchesCreatedInLastHours(hours);
 
-    matchesBefore = matchStatistics.getMatchesCreated();
-    playersBefore = playerStatistics.getPlayersEnrolled();
+    matchesStatsBefore = matchStatistics.getMatchesCreated();
+    playersStatsBefore = playerStatistics.getPlayersEnrolled();
 
-    System.out.println("Matches before tests: " + matchesBefore);
-    System.out.println("Players before tests: " + playersBefore);
+    System.out.println("Matches before tests: " + matchesStatsBefore);
+    System.out.println("Players before tests: " + playersStatsBefore);
   }
 
   @Test
@@ -126,13 +126,13 @@ class BackendApplicationTests {
   void _5_get_player_statistics_after_tests() {
     PlayerStatisticsDTO playerStatistics = playerService.getStatistics(hours);
 
-    assertEquals(playersBefore + 9, playerStatistics.getPlayersEnrolled());
+    assertEquals(playersStatsBefore + 9, playerStatistics.getPlayersEnrolled());
   }
 
   @Test
   void _6_get_match_statistics_after_tests() {
     MatchesStatisticsDTO match = matchService.getMatchesCreatedInLastHours(hours);
 
-    assertEquals(matchesBefore + 3, match.getMatchesCreated());
+    assertEquals(matchesStatsBefore + 3, match.getMatchesCreated());
   }
 }
