@@ -3,7 +3,6 @@ package com.tacs.backend.model;
 import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

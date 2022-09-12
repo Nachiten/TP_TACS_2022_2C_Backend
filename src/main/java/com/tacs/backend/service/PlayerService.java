@@ -70,19 +70,15 @@ public class PlayerService {
   private boolean getPlayerIsRegular(Match match) {
     int playerCount = match.getPlayers().size();
 
-    if (playerCount < 10)
-      return true;
-    else if (playerCount < 13)
-      return false;
-     else
-      throw new ConflictException("Match with id " + match.getId() + " is full");
+    if (playerCount < 10) return true;
+    else if (playerCount < 13) return false;
+    else throw new ConflictException("Match with id " + match.getId() + " is full");
   }
 
   public Player getPlayer(String id) {
     Optional<Player> player = playerRepository.findById(id);
 
-    if (player.isEmpty())
-      throw new EntityNotFoundException("Match not found");
+    if (player.isEmpty()) throw new EntityNotFoundException("Match not found");
 
     return player.get();
   }

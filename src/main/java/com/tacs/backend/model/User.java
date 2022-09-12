@@ -2,11 +2,9 @@ package com.tacs.backend.model;
 
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.Searchable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
