@@ -13,12 +13,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/matches")
-public class MatchController {
+public class  MatchController {
   @Autowired MatchService matchService;
 
   @Operation(summary = "Get all matches")
@@ -143,4 +144,29 @@ public class MatchController {
   public MatchesStatisticsDTO getStatistics() {
     return matchService.getStatistics();
   }
+
+
+    @Operation(summary = "Get all matches in format Page")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Found the matches",
+                            content =
+                            @Content(
+                                    array = @ArraySchema(schema = @Schema(implementation = Match.class)),
+                                    mediaType = "application/json")),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content())
+            })
+    @GetMapping("/all")
+    public Iterable<Match> getAllMatchesPageable(Pageable page) throws Exception {
+        return matchService.getMatchesPageable(page);
+
+
+    }
+
+
 }

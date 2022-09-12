@@ -6,9 +6,12 @@ import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +27,18 @@ public class MatchService {
 
   public Iterable<Match> getMatches() {
     return matchRepository.findAll();
+  }
+
+
+  public Page<Match> getMatchesPageable(Pageable pageable) throws Exception {
+    try {
+      Page matchslist = matchRepository.findAll(pageable);
+      return matchslist;
+    }catch (Exception e) {
+      throw new Exception(e.getMessage());
+
+    }
+
   }
 
   public Match getMatch(String id) {
@@ -60,4 +75,15 @@ public class MatchService {
 
     return new MatchesStatisticsDTO(matchesCreated);
   }
+
+
+
+
+  public void deleteAll(){
+    matchRepository.deleteAll();
+  }
+
+
+
+
 }

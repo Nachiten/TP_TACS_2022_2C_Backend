@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,6 +40,10 @@ public class PlayerService {
 
   public Iterable<Player> getPlayers() {
     return playerRepository.findAll();
+  }
+
+  public Iterable<Player> getPlayersPageable(Pageable page) {
+    return playerRepository.findAll(page);
   }
 
   private Player generateNewPlayer(PlayerCreationDTO playerCreation, boolean isRegular) {

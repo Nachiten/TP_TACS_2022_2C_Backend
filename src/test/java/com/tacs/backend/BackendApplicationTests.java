@@ -1,8 +1,11 @@
 package com.tacs.backend;
 
+import static io.restassured.RestAssured.DEFAULT_PORT;
+
+import static io.restassured.RestAssured.when;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.PlayerStatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
@@ -13,23 +16,40 @@ import com.tacs.backend.service.MatchService;
 import com.tacs.backend.service.PlayerService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import io.restassured.RestAssured.*;
+import io.restassured.matcher.RestAssuredMatchers.*;
+import org.hamcrest.Matchers.*;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.junit.Before;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+
 @TestMethodOrder(MethodOrderer.MethodName.class)
+@SpringBootTest()
 class BackendApplicationTests {
   @Autowired private MatchService matchService;
 
   @Autowired private PlayerService playerService;
 
+
   static Match match1, match2, match3;
   static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
   static int matchesBefore, playersBefore;
 
+  @Before
+  public void setUp() {
+    RestAssured.port = DEFAULT_PORT;
+    matchService.deleteAll();
+  }
   @Test
   void _0_initial_setup() {
     assertNotNull(matchService);
@@ -41,6 +61,8 @@ class BackendApplicationTests {
     System.out.println("The DB has " + matchesBefore + " matches already stored");
     System.out.println("The DB has " + playersBefore + " players already stored");
   }
+
+
 
   @Test
   void _1_create_three_matches() {
@@ -131,5 +153,13 @@ class BackendApplicationTests {
     MatchesStatisticsDTO match = matchService.getStatistics();
 
     assertEquals(matchesBefore + 3, match.getMatchesCreated());
+  }
+
+  @Test
+  void _7_get_match_findAllPageable() throws Exception {
+
+    RestAssured.baseURI= "http://localhost:3000/api";
+    RestAssured.given().when().get("/matches/all"+ "?page=0&size=1").then().assertThat().statusCode(200);
+    matchService.deleteAll();
   }
 }

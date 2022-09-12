@@ -6,6 +6,7 @@ import com.tacs.backend.model.User;
 import com.tacs.backend.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,11 @@ public class UserService {
   public Iterable<User> getUseres() {
     return userRepository.findAll();
   }
+
+  public Iterable<User> getUseresPageable(Pageable page) {
+    return userRepository.findAll(page);
+  }
+
 
   public User getUser(String id) {
     Optional<User> User = userRepository.findById(id);
