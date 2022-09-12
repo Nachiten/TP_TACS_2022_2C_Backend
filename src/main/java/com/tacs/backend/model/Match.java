@@ -26,10 +26,7 @@ public class Match implements Serializable {
   public LocalDateTime creationDate;
 
   @Schema(description = "Date in which the match will occur", required = true)
-  public LocalDate startingDate;
-
-  @Schema(description = "Hour in which the match will occur", required = true)
-  public LocalDateTime startingTime;
+  public LocalDateTime startingDateTime;
 
   @Schema(description = "Where the match will be played", required = true)
   String location;
@@ -37,10 +34,9 @@ public class Match implements Serializable {
   @Schema(description = "List of players of the match")
   List<Player> players;
 
-  public Match(String location, LocalDate startingDate, LocalDateTime startingTime) {
+  public Match(String location, LocalDateTime startingDateTime) {
     this.location = location;
-    this.startingDate = startingDate;
-    this.startingTime = startingTime;
+    this.startingDateTime = startingDateTime;
 
     this.creationDate = LocalDateTime.now();
     this.players = new ArrayList<>();

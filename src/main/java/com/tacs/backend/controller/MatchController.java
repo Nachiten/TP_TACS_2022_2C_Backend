@@ -140,7 +140,7 @@ public class MatchController {
                     mediaType = "application/json"))
       })
   @GetMapping("/statistics")
-  public MatchesStatisticsDTO getStatistics() {
-    return matchService.getStatistics();
+  public MatchesStatisticsDTO getStatistics(@Valid @RequestParam int hours) {
+    return matchService.getMatchesCreatedInLastHours(hours);
   }
 }

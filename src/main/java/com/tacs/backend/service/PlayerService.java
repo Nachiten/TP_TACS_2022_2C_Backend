@@ -29,7 +29,7 @@ public class PlayerService {
 
     boolean regularPlayer = getPlayerIsRegular(match);
 
-    Player newPlayer = generateNewPlayer(playerCreation, regularPlayer);
+    Player newPlayer = generatePlayer(playerCreation, regularPlayer);
 
     match.getPlayers().add(newPlayer);
     matchRepository.save(match);
@@ -41,23 +41,12 @@ public class PlayerService {
     return playerRepository.findAll();
   }
 
-  private Player generateNewPlayer(PlayerCreationDTO playerCreation, boolean isRegular) {
-    Iterable<User> user = userRepository.findAll();
+  private Player generatePlayer(PlayerCreationDTO playerCreation, boolean isRegular) {
+    Optional<User> userFound = userRepository.findByEmail(playerCreation.getUserEmail());
 
-    // TODO - Horrible code, correct
-
-    // Find user with email
-    User userFound = null;
-
-    for (User u : user) {
-      if (u.getEmail().equals(playerCreation.getUserEmail())) {
-        userFound = u;
-      }
-    }
-
-    if (userFound != null) {
+    if (userFound.isPresent()) {
       // If player with email exists, use it
-      String existingUserId = userFound.getId();
+      String existingUserId = userFound.get().getId();
 
       return new Player(playerCreation.getMatchId(), existingUserId, isRegular);
     } else {
@@ -72,9 +61,8 @@ public class PlayerService {
   private Match getMatch(String matchId) {
     Optional<Match> match = matchRepository.findById(matchId);
 
-    if (match.isEmpty()) {
+    if (match.isEmpty())
       throw new EntityNotFoundException("Match with id " + matchId + " not found");
-    }
 
     return match.get();
   }
@@ -82,35 +70,31 @@ public class PlayerService {
   private boolean getPlayerIsRegular(Match match) {
     int playerCount = match.getPlayers().size();
 
-    if (playerCount < 10) {
+    if (playerCount < 10)
       return true;
-    } else if (playerCount < 13) {
+    else if (playerCount < 13)
       return false;
-    } else {
+     else
       throw new ConflictException("Match with id " + match.getId() + " is full");
-    }
   }
 
   public Player getPlayer(String id) {
     Optional<Player> player = playerRepository.findById(id);
 
-    if (player.isEmpty()) {
+    if (player.isEmpty())
       throw new EntityNotFoundException("Match not found");
-    }
 
     return player.get();
   }
 
-  public PlayerStatisticsDTO getStatistics() {
-    int hoursAgo = 2;
-
+  public PlayerStatisticsDTO getStatistics(int hours) {
     // Get the count of players registered in the last two hours
     int playersRegistered =
         (int)
             StreamSupport.stream(playerRepository.findAll().spliterator(), false)
                 .filter(
                     player ->
-                        player.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
+                        player.getCreationDate().isAfter(LocalDateTime.now().minusHours(hours)))
                 .count();
 
     return new PlayerStatisticsDTO(playersRegistered);

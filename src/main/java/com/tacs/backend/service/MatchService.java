@@ -16,8 +16,7 @@ public class MatchService {
   @Autowired private MatchRepository matchRepository;
 
   public Match createMatch(MatchCreationDTO match) {
-    Match newMatch =
-        new Match(match.getLocation(), match.getStartingDate(), match.getStartingTime());
+    Match newMatch = new Match(match.getLocation(), match.getStartingDateTime());
 
     return matchRepository.save(newMatch);
   }
@@ -39,23 +38,17 @@ public class MatchService {
   public void deleteMatch(String id) {
     Optional<Match> match = matchRepository.findById(id);
 
-    if (match.isEmpty()) {
+    if (match.isEmpty())
       throw new EntityNotFoundException("Match not found");
-    }
 
     matchRepository.delete(match.get());
   }
 
-  public MatchesStatisticsDTO getStatistics() {
-    int hoursAgo = 2;
-
-    // Get the count of matches created in the last two hours
+  public MatchesStatisticsDTO getMatchesCreatedInLastHours(int hours) {
+    // Get the count of matches created in the last hours
     int matchesCreated =
-        (int)
-            StreamSupport.stream(matchRepository.findAll().spliterator(), false)
-                .filter(
-                    match ->
-                        match.getCreationDate().isAfter(LocalDateTime.now().minusHours(hoursAgo)))
+            (int) StreamSupport.stream(matchRepository.findAll().spliterator(), false)
+                .filter(match -> match.getCreationDate().isAfter(LocalDateTime.now().minusHours(hours)))
                 .count();
 
     return new MatchesStatisticsDTO(matchesCreated);

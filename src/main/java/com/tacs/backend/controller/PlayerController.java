@@ -85,7 +85,7 @@ public class PlayerController {
             content = @Content)
       })
   @GetMapping("/statistics")
-  public PlayerStatisticsDTO getStatistics() {
-    return playerService.getStatistics();
+  public PlayerStatisticsDTO getStatistics(@Valid @RequestParam int hours) {
+    return playerService.getStatistics(hours);
   }
 }

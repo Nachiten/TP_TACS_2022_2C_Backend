@@ -11,7 +11,6 @@ import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.service.MatchService;
 import com.tacs.backend.service.PlayerService;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -30,13 +29,15 @@ class BackendApplicationTests {
   static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
   static int matchesBefore, playersBefore;
 
+  static int hours = 2;
+
   @Test
   void _0_get_statistics_before_tests() {
     assertNotNull(matchService);
     assertNotNull(playerService);
 
-    PlayerStatisticsDTO playerStatistics = playerService.getStatistics();
-    MatchesStatisticsDTO matchStatistics = matchService.getStatistics();
+    PlayerStatisticsDTO playerStatistics = playerService.getStatistics(hours);
+    MatchesStatisticsDTO matchStatistics = matchService.getMatchesCreatedInLastHours(hours);
 
     matchesBefore = matchStatistics.getMatchesCreated();
     playersBefore = playerStatistics.getPlayersEnrolled();
@@ -47,12 +48,11 @@ class BackendApplicationTests {
 
   @Test
   void _1_create_three_matches() {
-    LocalDate date = LocalDate.now();
     LocalDateTime dateTime = LocalDateTime.now();
 
-    match1 = matchService.createMatch(new MatchCreationDTO(date, dateTime, "Calle Corrientes"));
-    match2 = matchService.createMatch(new MatchCreationDTO(date, dateTime, "Calle Camargo"));
-    match3 = matchService.createMatch(new MatchCreationDTO(date, dateTime, "Calle Florida"));
+    match1 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Corrientes"));
+    match2 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Camargo"));
+    match3 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Florida"));
 
     assertNotNull(match1);
     assertNotNull(match2);
@@ -124,14 +124,14 @@ class BackendApplicationTests {
 
   @Test
   void _5_get_player_statistics_after_tests() {
-    PlayerStatisticsDTO playerStatistics = playerService.getStatistics();
+    PlayerStatisticsDTO playerStatistics = playerService.getStatistics(hours);
 
     assertEquals(playersBefore + 9, playerStatistics.getPlayersEnrolled());
   }
 
   @Test
   void _6_get_match_statistics_after_tests() {
-    MatchesStatisticsDTO match = matchService.getStatistics();
+    MatchesStatisticsDTO match = matchService.getMatchesCreatedInLastHours(hours);
 
     assertEquals(matchesBefore + 3, match.getMatchesCreated());
   }
