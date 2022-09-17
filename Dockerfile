@@ -3,7 +3,7 @@ FROM maven:3-openjdk-17 as build
 WORKDIR /usr/app
 
 COPY pom.xml .
-RUN mvn verify --fail-never
+RUN mvn dependency:go-offline
 
 ADD src src/
 RUN mvn package -Dmaven.test.skip
