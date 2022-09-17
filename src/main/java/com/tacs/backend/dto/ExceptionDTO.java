@@ -17,4 +17,7 @@ public class ExceptionDTO {
 
   @Schema(description = "Exception message")
   private String message;
+
+  @Schema(description = "Exception error code")
+  private String errorCode;
 }

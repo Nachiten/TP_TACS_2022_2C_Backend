@@ -51,7 +51,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     return handleExceptionInternal(
         ex,
-        new ExceptionDTO("MethodArgumentNotValidException", errors),
+        new ExceptionDTO("MethodArgumentNotValidException", errors, "BAD_REQUEST"),
         headers,
         statusCode,
         request);
@@ -83,9 +83,9 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   private ResponseEntity<ExceptionDTO> generateResponseEntity(
-      Exception ex, HttpStatus statusCode, String exceptionName) {
+      BackendRuntimeException ex, HttpStatus statusCode, String exceptionName) {
     ex.printStackTrace();
-    ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage());
+    ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage(), ex.getErrorCode());
     return new ResponseEntity<>(exceptionDTO, statusCode);
   }
 }

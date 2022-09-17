@@ -25,13 +25,23 @@ public class Match implements Serializable {
   public LocalDateTime creationDate;
 
   @Schema(description = "Date in which the match will occur", required = true)
+  @EqualsAndHashCode.Include
   public LocalDateTime startingDateTime;
 
   @Schema(description = "Where the match will be played", required = true)
+  @EqualsAndHashCode.Include
   String location;
 
   @Schema(description = "List of players of the match")
   List<Player> players;
+
+  public void addPlayer(Player player) {
+    players.add(player);
+  }
+
+  public boolean hasPlayer(Player player) {
+    return players.contains(player);
+  }
 
   public Match(String location, LocalDateTime startingDateTime) {
     this.location = location;
