@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +30,7 @@ public class Player implements Serializable {
   String email;
 
   @Schema(description = "Is the player regular or substitute?", required = true)
+  @JsonProperty(value = "isRegular")
   boolean isRegular;
 
   public Player(String matchId, Long phoneNumber, String email, boolean isRegular) {
