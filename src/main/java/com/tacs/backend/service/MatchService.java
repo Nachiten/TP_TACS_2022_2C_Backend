@@ -4,6 +4,7 @@ import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.dto.creation.PlayerCreationDTO;
 import com.tacs.backend.exception.ConflictException;
 import com.tacs.backend.exception.EntityNotFoundException;
+import com.tacs.backend.model.ErrorCode;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.repository.MatchRepository;
@@ -23,10 +24,11 @@ public class MatchService {
     Iterable<Match> matches = getMatches();
 
     if (StreamSupport.stream(matches.spliterator(), false).anyMatch(m -> m.equals(newMatch)))
-      throw new ConflictException("The match already exists.", "MATCH_EXISTENT");
+      throw new ConflictException("The match already exists.", ErrorCode.MATCH_EXISTENT);
 
     if (newMatch.getStartingDateTime().isBefore(LocalDateTime.now()))
-      throw new ConflictException("The match starting date is before now.", "INVALID_MATCH_DATE");
+      throw new ConflictException(
+          "The match starting date is before now.", ErrorCode.INVALID_MATCH_DATE);
 
     return matchRepository.save(newMatch);
   }
@@ -39,7 +41,7 @@ public class MatchService {
     Optional<Match> match = matchRepository.findById(id);
 
     if (match.isEmpty()) {
-      throw new EntityNotFoundException("Match not found", "MATCH_NOT_FOUND");
+      throw new EntityNotFoundException("Match not found", ErrorCode.MATCH_NOT_FOUND);
     }
 
     return match.get();
@@ -48,7 +50,8 @@ public class MatchService {
   public void deleteMatch(String id) {
     Optional<Match> match = matchRepository.findById(id);
 
-    if (match.isEmpty()) throw new EntityNotFoundException("Match not found", "MATCH_NOT_FOUND");
+    if (match.isEmpty())
+      throw new EntityNotFoundException("Match not found", ErrorCode.MATCH_NOT_FOUND);
 
     matchRepository.delete(match.get());
   }
@@ -73,7 +76,7 @@ public class MatchService {
 
   private void checkPlayerExistent(Player player, Match match) {
     if (match.hasPlayer(player)) {
-      throw new ConflictException("Player already exists", "PLAYER_EXISTENT");
+      throw new ConflictException("Player already exists", ErrorCode.PLAYER_EXISTENT);
     }
   }
 
@@ -82,6 +85,8 @@ public class MatchService {
 
     if (playerCount < 10) return true;
     else if (playerCount < 13) return false;
-    else throw new ConflictException("Match with id " + match.getId() + " is full", "MATCH_FULL");
+    else
+      throw new ConflictException(
+          "Match with id " + match.getId() + " is full", ErrorCode.MATCH_FULL);
   }
 }

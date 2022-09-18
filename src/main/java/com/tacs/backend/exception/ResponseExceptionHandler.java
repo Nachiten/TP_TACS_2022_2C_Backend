@@ -1,6 +1,7 @@
 package com.tacs.backend.exception;
 
 import com.tacs.backend.dto.ExceptionDTO;
+import com.tacs.backend.model.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +53,27 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     return handleExceptionInternal(
         ex,
-        new ExceptionDTO("MethodArgumentNotValidException", errors, "BAD_REQUEST"),
+        new ExceptionDTO("MethodArgumentNotValidException", errors, ErrorCode.INVALID_BODY),
+        headers,
+        statusCode,
+        request);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleMissingServletRequestParameter(
+      MissingServletRequestParameterException ex,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+
+    HttpStatus statusCode = HttpStatus.BAD_REQUEST;
+
+    String errors = getErrors(ex);
+
+    return handleExceptionInternal(
+        ex,
+        new ExceptionDTO(
+            "MissingServletRequestParameterException", errors, ErrorCode.MISSING_REQUEST_PARAM),
         headers,
         statusCode,
         request);
@@ -80,6 +102,10 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     return errorsString.toString();
+  }
+
+  private String getErrors(MissingServletRequestParameterException ex) {
+    return ex.getParameterName() + " parameter is missing of type " + ex.getParameterType();
   }
 
   private ResponseEntity<ExceptionDTO> generateResponseEntity(

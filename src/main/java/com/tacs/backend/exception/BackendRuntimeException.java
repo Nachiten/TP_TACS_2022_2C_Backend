@@ -1,5 +1,6 @@
 package com.tacs.backend.exception;
 
+import com.tacs.backend.model.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,9 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BackendRuntimeException extends RuntimeException {
-  String errorCode;
+  ErrorCode errorCode;
 
-  public BackendRuntimeException(String message, String errorCode) {
+  public BackendRuntimeException(String message, ErrorCode errorCode) {
     super(message);
 
     this.errorCode = errorCode;
