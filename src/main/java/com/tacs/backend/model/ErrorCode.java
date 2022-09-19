@@ -11,6 +11,8 @@ public enum ErrorCode {
   MISSING_REQUEST_PARAM,
 
   MISSING_QUERY_PARAM,
+
+  INVALID_QUERY_PARAM,
   INVALID_BODY,
 
   // --- Player ---

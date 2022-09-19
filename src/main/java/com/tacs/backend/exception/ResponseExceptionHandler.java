@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestController
@@ -36,6 +37,20 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     HttpStatus statusCode = HttpStatus.CONFLICT;
 
     return generateResponseEntity(ex, statusCode, "ConflictException");
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(
+      MethodArgumentTypeMismatchException ex) {
+
+    HttpStatus statusCode = HttpStatus.BAD_REQUEST;
+
+    String errors = getErrors(ex);
+
+    ExceptionDTO exceptionDTO =
+        new ExceptionDTO(
+            "MethodArgumentTypeMismatchException", errors, ErrorCode.INVALID_QUERY_PARAM);
+    return new ResponseEntity<>(exceptionDTO, statusCode);
   }
 
   // --- SPRING exceptions ---
@@ -105,7 +120,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   private String getErrors(MissingServletRequestParameterException ex) {
-    return ex.getParameterName() + " parameter is missing of type " + ex.getParameterType();
+    return "'" + ex.getParameterName() + "' parameter is missing of type " + ex.getParameterType();
+  }
+
+  private String getErrors(MethodArgumentTypeMismatchException ex) {
+    return "'" + ex.getName() + "' should be of type " + ex.getRequiredType();
   }
 
   private ResponseEntity<ExceptionDTO> generateResponseEntity(
