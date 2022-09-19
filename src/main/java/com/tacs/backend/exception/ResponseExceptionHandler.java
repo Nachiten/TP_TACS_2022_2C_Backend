@@ -88,7 +88,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(
         ex,
         new ExceptionDTO(
-            "MissingServletRequestParameterException", errors, ErrorCode.MISSING_REQUEST_PARAM),
+            "MissingServletRequestParameterException", errors, ErrorCode.MISSING_QUERY_PARAM),
         headers,
         statusCode,
         request);

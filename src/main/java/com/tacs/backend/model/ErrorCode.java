@@ -8,11 +8,8 @@ public enum ErrorCode {
   INVALID_MATCH_DATE,
 
   // --- User error ---
-  MISSING_REQUEST_PARAM,
-
-  MISSING_QUERY_PARAM,
-
   INVALID_QUERY_PARAM,
+  MISSING_QUERY_PARAM,
   INVALID_BODY,
 
   // --- Player ---

@@ -7,6 +7,7 @@ import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,25 +22,25 @@ import org.springframework.web.bind.annotation.*;
 public class MatchController {
   @Autowired MatchService matchService;
 
-  //  @Operation(summary = "Get all matches")
-  //  @ApiResponses(
-  //      value = {
-  //        @ApiResponse(
-  //            responseCode = "200",
-  //            description = "Found the matches",
-  //            content =
-  //                @Content(
-  //                    array = @ArraySchema(schema = @Schema(implementation = Match.class)),
-  //                    mediaType = "application/json")),
-  //        @ApiResponse(
-  //            responseCode = "500",
-  //            description = "Internal server error",
-  //            content = @Content())
-  //      })
-  //  @GetMapping()
-  //  public Iterable<Match> getMatches() {
-  //    return matchService.getMatches();
-  //  }
+  @Operation(summary = "Get all matches")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Found the matches",
+            content =
+                @Content(
+                    array = @ArraySchema(schema = @Schema(implementation = Match.class)),
+                    mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = @Content())
+      })
+  @GetMapping()
+  public Iterable<Match> getMatches() {
+    return matchService.getMatches();
+  }
 
   @Operation(summary = "Get a match by its id")
   @ApiResponses(
