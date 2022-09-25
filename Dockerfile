@@ -10,7 +10,8 @@ RUN mvn package -Dmaven.test.skip
 
 FROM openjdk:17-jdk-alpine
 COPY --from=build /usr/app/target/backend-1.0.0_ENTREGA_1.jar /app/runner.jar
-
+RUN apk add --update --no-cache tzdata
+ENV TZ=America/Buenos_Aires
 # Defined spring boot port by config
 EXPOSE 3000
 
