@@ -3,7 +3,6 @@ package com.tacs.backend.model;
 import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +19,33 @@ import org.springframework.data.annotation.Id;
 public class Match implements Serializable {
   @Id
   @Schema(description = "Match ID")
-  String id;
+  private String id;
 
   @Schema(description = "Date in which the match was created")
-  public LocalDateTime creationDate;
+  private LocalDateTime creationDate;
 
   @Schema(description = "Date in which the match will occur", required = true)
-  public LocalDate startingDate;
-
-  @Schema(description = "Hour in which the match will occur", required = true)
-  public LocalDateTime startingTime;
+  @EqualsAndHashCode.Include
+  private LocalDateTime startingDateTime;
 
   @Schema(description = "Where the match will be played", required = true)
-  String location;
+  @EqualsAndHashCode.Include
+  private String location;
 
   @Schema(description = "List of players of the match")
-  List<Player> players;
+  private List<Player> players;
 
-  public Match(String location, LocalDate startingDate, LocalDateTime startingTime) {
+  public void addPlayer(Player player) {
+    players.add(player);
+  }
+
+  public boolean hasPlayer(Player player) {
+    return players.contains(player);
+  }
+
+  public Match(String location, LocalDateTime startingDateTime) {
     this.location = location;
-    this.startingDate = startingDate;
-    this.startingTime = startingTime;
+    this.startingDateTime = startingDateTime;
 
     this.creationDate = LocalDateTime.now();
     this.players = new ArrayList<>();

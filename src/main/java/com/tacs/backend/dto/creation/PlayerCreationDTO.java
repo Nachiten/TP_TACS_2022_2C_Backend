@@ -14,14 +14,10 @@ import lombok.Setter;
 @Schema(description = "DTO for creating a player")
 public class PlayerCreationDTO {
   @NotNull
-  @Schema(description = "Match in which the player will play", required = true)
-  String matchId;
-
-  @NotNull
   @Schema(description = "Phone number of the user who is playing", required = true)
-  String userPhoneNumber;
+  Long phoneNumber;
 
   @NotNull
   @Schema(description = "Email of the user who is playing", required = true)
-  String userEmail;
+  String email;
 }

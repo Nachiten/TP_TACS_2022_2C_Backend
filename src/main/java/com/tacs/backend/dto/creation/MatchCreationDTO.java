@@ -1,7 +1,6 @@
 package com.tacs.backend.dto.creation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,11 +16,7 @@ import lombok.Setter;
 public class MatchCreationDTO {
   @NotNull
   @Schema(description = "Date in which the match will occur", required = true)
-  public LocalDate startingDate;
-
-  @NotNull
-  @Schema(description = "Hour in which the match will occur", required = true)
-  public LocalDateTime startingTime;
+  public LocalDateTime startingDateTime;
 
   @NotNull
   @Schema(description = "Where the match will be played", required = true)

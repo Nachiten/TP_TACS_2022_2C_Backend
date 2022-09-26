@@ -1,24 +1,18 @@
-# Step 1 - Build
-FROM openjdk:17-jdk-alpine as build
-WORKDIR /workspace/app
+FROM maven:3-openjdk-17 as build
 
-COPY mvnw .
-COPY .mvn .mvn
+WORKDIR /usr/app
+
 COPY pom.xml .
-COPY src src
+RUN mvn dependency:go-offline
 
-RUN chmod +x mvnw && ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+ADD src src/
+RUN mvn package -Dmaven.test.skip
 
-# Step 2 - Run
 FROM openjdk:17-jdk-alpine
-VOLUME /tmp
-ARG BUILD_FOLDER=/workspace/app/target/dependency
-COPY --from=build ${BUILD_FOLDER}/BOOT-INF/lib /app/lib
-COPY --from=build ${BUILD_FOLDER}/META-INF /app/META-INF
-COPY --from=build ${BUILD_FOLDER}/BOOT-INF/classes /app
-
+COPY --from=build /usr/app/target/backend-1.0.0_ENTREGA_1.jar /app/runner.jar
+RUN apk add --update --no-cache tzdata
+ENV TZ=America/Buenos_Aires
 # Defined spring boot port by config
 EXPOSE 3000
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.tacs.backend.BackendApplication"]
+ENTRYPOINT ["java", "-jar", "/app/runner.jar"]

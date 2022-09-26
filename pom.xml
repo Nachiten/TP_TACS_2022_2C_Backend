@@ -17,7 +17,7 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		<!-- SPRING BOOT DEPENDENCY -->
+		<!-- SPRING BOOT DEPENDENCIES -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -70,7 +70,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- OPEN API -->
+		<!-- OPEN API (SwaggerUI) -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>

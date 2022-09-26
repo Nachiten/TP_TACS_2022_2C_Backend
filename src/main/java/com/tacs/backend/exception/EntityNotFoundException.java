@@ -1,12 +1,12 @@
 package com.tacs.backend.exception;
 
+import com.tacs.backend.model.ErrorCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.StandardException;
 
 @NoArgsConstructor
-@StandardException
-public class EntityNotFoundException extends RuntimeException {
-  public EntityNotFoundException(String message) {
-    super(message);
+public class EntityNotFoundException extends BackendRuntimeException {
+
+  public EntityNotFoundException(String message, ErrorCode errorCode) {
+    super(message, errorCode);
   }
 }

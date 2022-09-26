@@ -1,9 +1,10 @@
 package com.tacs.backend.controller;
 
 import com.tacs.backend.dto.ExceptionDTO;
-import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
+import com.tacs.backend.dto.creation.PlayerCreationDTO;
 import com.tacs.backend.model.Match;
+import com.tacs.backend.model.Player;
 import com.tacs.backend.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -128,19 +129,32 @@ public class MatchController {
     matchService.deleteMatch(id);
   }
 
-  @Operation(summary = "Get the amount of matches created in the last two hours")
+  @Operation(summary = "Create a new player")
   @ApiResponses(
       value = {
         @ApiResponse(
-            responseCode = "200",
-            description = "Ok",
+            responseCode = "201",
+            description = "Created",
             content =
                 @Content(
-                    schema = @Schema(implementation = MatchesStatisticsDTO.class),
-                    mediaType = "application/json"))
+                    schema = @Schema(implementation = Player.class),
+                    mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid body",
+            content =
+                @Content(
+                    schema = @Schema(implementation = ExceptionDTO.class),
+                    mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = @Content)
       })
-  @GetMapping("/statistics")
-  public MatchesStatisticsDTO getStatistics() {
-    return matchService.getStatistics();
+  @PostMapping("/{id}/players")
+  @ResponseStatus(code = HttpStatus.CREATED)
+  public Player createPlayer(
+      @PathVariable String id, @Valid @RequestBody PlayerCreationDTO player) {
+    return matchService.createPlayer(player, id);
   }
 }

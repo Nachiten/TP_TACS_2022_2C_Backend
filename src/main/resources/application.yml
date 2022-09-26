@@ -1,3 +1,5 @@
+timeZone: America/Buenos_Aires
+
 server:
   port: 3000
   servlet:
@@ -16,7 +18,7 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
 
   redis:
-    host: 192.168.92.4 # Docker-compose IP | change to localhost to run locally
+    host: ${REDIS_IP:localhost}
     port: 6379
 #   password: <no password>
 #   timeout: 10000
