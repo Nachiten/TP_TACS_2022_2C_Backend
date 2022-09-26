@@ -45,25 +45,32 @@ class BackendApplicationTests {
   @Test
   void _1_create_three_matches() {
     LocalDateTime dateTime = LocalDateTime.now();
+    LocalDateTime tomorrow = dateTime.plusDays(1);
 
-    match1 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Corrientes"));
-    match2 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Camargo"));
-    match3 = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Florida"));
+    match1 = matchService.createMatch(new MatchCreationDTO(tomorrow, "Calle Corrientes"));
+    match2 = matchService.createMatch(new MatchCreationDTO(tomorrow, "Calle Camargo"));
+    match3 = matchService.createMatch(new MatchCreationDTO(tomorrow, "Calle Florida"));
 
     assertNotNull(match1);
     assertNotNull(match2);
     assertNotNull(match3);
+    assertEquals(tomorrow, match1.getStartingDateTime());
+    assertEquals(tomorrow, match2.getStartingDateTime());
+    assertEquals(tomorrow, match3.getStartingDateTime());
+    assertEquals("Calle Corrientes", match1.getLocation());
+    assertEquals("Calle Camargo", match2.getLocation());
+    assertEquals("Calle Florida", match3.getLocation());
   }
 
   @Test
-  void _2_matches_correctly_created() {
-    Match theMatch1 = matchService.getMatch(match1.getId());
-    Match theMatch2 = matchService.getMatch(match2.getId());
-    Match theMatch3 = matchService.getMatch(match3.getId());
+  void _2_create_match_with_error() {
+    try {
+      LocalDateTime dateTime = LocalDateTime.now();
 
-    assertEquals(theMatch1, match1);
-    assertEquals(theMatch2, match2);
-    assertEquals(theMatch3, match3);
+      Match match = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Corrientes"));
+    } catch (Exception e) {
+      assertEquals("The match starting date is before now.", e.getMessage());
+    }
   }
 
   @Test
