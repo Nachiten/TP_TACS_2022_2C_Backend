@@ -19,21 +19,21 @@ import org.springframework.data.annotation.Id;
 public class Match implements Serializable {
   @Id
   @Schema(description = "Match ID")
-  String id;
+  private String id;
 
   @Schema(description = "Date in which the match was created")
-  public LocalDateTime creationDate;
+  private LocalDateTime creationDate;
 
   @Schema(description = "Date in which the match will occur", required = true)
   @EqualsAndHashCode.Include
-  public LocalDateTime startingDateTime;
+  private LocalDateTime startingDateTime;
 
   @Schema(description = "Where the match will be played", required = true)
   @EqualsAndHashCode.Include
-  String location;
+  private String location;
 
   @Schema(description = "List of players of the match")
-  List<Player> players;
+  private List<Player> players;
 
   public void addPlayer(Player player) {
     players.add(player);
