@@ -51,4 +51,9 @@ public class Player implements Serializable {
 
     return phoneNumber.equals(player.phoneNumber) || email.equals(player.email);
   }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }
