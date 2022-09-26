@@ -129,7 +129,6 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
   private ResponseEntity<ExceptionDTO> generateResponseEntity(
       BackendRuntimeException ex, HttpStatus statusCode, String exceptionName) {
-    ex.printStackTrace();
     ExceptionDTO exceptionDTO = new ExceptionDTO(exceptionName, ex.getMessage(), ex.getErrorCode());
     return new ResponseEntity<>(exceptionDTO, statusCode);
   }

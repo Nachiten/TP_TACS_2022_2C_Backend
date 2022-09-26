@@ -129,26 +129,6 @@ public class MatchController {
     matchService.deleteMatch(id);
   }
 
-  //  @Operation(summary = "Get all players")
-  //  @ApiResponses(
-  //      value = {
-  //          @ApiResponse(
-  //              responseCode = "200",
-  //              description = "Found the players",
-  //              content =
-  //              @Content(
-  //                  array = @ArraySchema(schema = @Schema(implementation = Player.class)),
-  //                  mediaType = "application/json")),
-  //          @ApiResponse(
-  //              responseCode = "500",
-  //              description = "Internal server error",
-  //              content = @Content())
-  //      })
-  //  @GetMapping()
-  //  public Iterable<Player> getMatchPlayers() {
-  //    return playerService.getPlayers();
-  //  }
-
   @Operation(summary = "Create a new player")
   @ApiResponses(
       value = {
