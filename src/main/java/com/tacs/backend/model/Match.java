@@ -1,6 +1,5 @@
 package com.tacs.backend.model;
 
-import com.redis.om.spring.annotations.Document;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -8,14 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Schema(description = "A football match")
-@Document
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Document(collection = "matches")
 public class Match implements Serializable {
   @Id
   @Schema(description = "Match ID")
