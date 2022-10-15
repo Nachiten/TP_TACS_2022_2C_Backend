@@ -1,5 +1,6 @@
 package com.tacs.backend;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.tacs.backend.dto.MatchesStatisticsDTO;
@@ -16,10 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
+@WebAppConfiguration
 class BackendApplicationTests {
+
   @Autowired private MatchService matchService;
   @Autowired private StatisticsService statisticsService;
 
@@ -74,9 +78,9 @@ class BackendApplicationTests {
 
   @Test
   void _3_add_three_players_to_each_match() {
-    // String match1ID = match1.getId();
-    // String match2ID = match2.getId();
-    // String match3ID = match3.getId();
+    String match1ID = match1.getId();
+    String match2ID = match2.getId();
+    String match3ID = match3.getId();
 
     player1 =
         matchService.createPlayer(
