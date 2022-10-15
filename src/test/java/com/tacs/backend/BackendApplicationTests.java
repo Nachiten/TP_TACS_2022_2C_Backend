@@ -1,6 +1,5 @@
 package com.tacs.backend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.tacs.backend.dto.MatchesStatisticsDTO;
@@ -75,9 +74,9 @@ class BackendApplicationTests {
 
   @Test
   void _3_add_three_players_to_each_match() {
-    String match1ID = match1.getId();
-    String match2ID = match2.getId();
-    String match3ID = match3.getId();
+    // String match1ID = match1.getId();
+    // String match2ID = match2.getId();
+    // String match3ID = match3.getId();
 
     player1 =
         matchService.createPlayer(

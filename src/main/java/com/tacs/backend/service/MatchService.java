@@ -9,14 +9,20 @@ import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.repository.MatchRepository;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MatchService {
   @Autowired private MatchRepository matchRepository;
+
+  @Value("${timeZone}")
+  private String timeZone;
 
   public Match createMatch(MatchCreationDTO match) {
     Match newMatch = new Match(match.getLocation(), match.getStartingDateTime());
@@ -43,6 +49,23 @@ public class MatchService {
     if (match.isEmpty()) {
       throw new EntityNotFoundException("Match not found", ErrorCode.MATCH_NOT_FOUND);
     }
+
+    Match matchFound = match.get();
+
+    LocalDateTime oldDateTime = matchFound.getStartingDateTime();
+    // Java default time zone is GMT-6
+    ZoneId oldZone = ZoneId.of("GMT-6");
+
+    ZoneId newZone = ZoneId.of(timeZone);
+    ZonedDateTime newDateTime = oldDateTime.atZone(oldZone).withZoneSameInstant(newZone);
+
+    matchFound.setStartingDateTime(
+        LocalDateTime.of(
+            newDateTime.getYear(),
+            newDateTime.getMonth(),
+            newDateTime.getDayOfMonth(),
+            newDateTime.getHour(),
+            newDateTime.getMinute()));
 
     return match.get();
   }

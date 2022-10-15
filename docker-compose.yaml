@@ -1,29 +1,50 @@
 version: '3'
 services:
   angular_front:
-    image: tacs2c2022grupo2/tacs-frontend
+    image: tacs2c2022grupo2/tacs-frontend:latest
     ports:
     - 4200:80
     networks:
       tacs_network:
         ipv4_address: 192.168.92.3
   java_back:
-    image: tacs2c2022grupo2/tacs-backend
+    image: tacs2c2022grupo2/tacs-backend:latest
     ports:
     - 3000:3000
+    environment:
+      MONGODB_URI: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/tacs?retryWrites=true&w=majority&authSource=admin
     networks:
       tacs_network:
         ipv4_address: 192.168.92.2
-  redis_db:
-    image: redis/redis-stack
-    ports:
-    - 6379:6379
+  mongo:
+    image: mongo
+    volumes:
+    - mongodbdata:/data/db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
     networks:
       tacs_network:
         ipv4_address: 192.168.92.4
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+    - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/
+    networks:
+      tacs_network:
+        ipv4_address: 192.168.92.5
 networks:
   tacs_network:
     ipam:
       driver: default
       config:
       - subnet: 192.168.92.0/24
+volumes:
+  mongodbdata:
+    external: true
