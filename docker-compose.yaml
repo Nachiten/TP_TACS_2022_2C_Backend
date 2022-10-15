@@ -18,6 +18,8 @@ services:
         ipv4_address: 192.168.92.2
   mongo:
     image: mongo
+    volumes:
+    - mongodbdata:/data/db
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
@@ -43,3 +45,6 @@ networks:
       driver: default
       config:
       - subnet: 192.168.92.0/24
+volumes:
+  mongodbdata:
+    external: true
