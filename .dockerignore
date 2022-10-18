@@ -1,6 +1,0 @@
-.vscode/
-.idea/
-.mvn/
-.git/
-sonar.sh
-pre-commit.pyz

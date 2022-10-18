@@ -1,8 +1,6 @@
 package com.tacs.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.redis.om.spring.annotations.Document;
-import com.redis.om.spring.annotations.Indexed;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,7 +11,6 @@ import lombok.*;
 @Getter
 @Setter
 @Schema(description = "A user playing on a match")
-@Document
 public class Player implements Serializable {
 
   @Schema(description = "Date in which the player was created")
@@ -26,7 +23,6 @@ public class Player implements Serializable {
   Long phoneNumber;
 
   @Schema(description = "User email address", required = true)
-  @Indexed
   String email;
 
   @Schema(description = "Is the player regular or substitute?", required = true)

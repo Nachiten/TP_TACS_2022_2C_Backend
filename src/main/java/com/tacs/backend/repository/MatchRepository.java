@@ -1,6 +1,8 @@
 package com.tacs.backend.repository;
 
-import com.redis.om.spring.repository.RedisDocumentRepository;
 import com.tacs.backend.model.Match;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface MatchRepository extends RedisDocumentRepository<Match, String> {}
+@Repository
+public interface MatchRepository extends MongoRepository<Match, String> {}
