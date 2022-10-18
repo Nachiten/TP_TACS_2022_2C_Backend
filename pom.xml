@@ -56,8 +56,6 @@
 <!--			<version>0.5.2-SNAPSHOT</version>-->
 <!--		</dependency>-->
 
-
-
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
