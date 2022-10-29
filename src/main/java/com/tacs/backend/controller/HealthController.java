@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/health")
 public class HealthController {
 
-  @Operation(hidden = true)
-  @GetMapping()
-  public HealthDTO health() {
-    return new HealthDTO("Healthy!");
-  }
+    @Operation(hidden = true)
+    @GetMapping()
+    public HealthDTO health() {
+        return new HealthDTO("Healthy!");
+    }
 }

@@ -16,9 +16,3 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-
-  data:
-    mongodb:
-      uri: mongodb://root:example@127.0.0.1:27017/tacs?retryWrites=true&w=majority&authSource=admin
-
-

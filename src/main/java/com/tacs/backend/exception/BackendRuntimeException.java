@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BackendRuntimeException extends RuntimeException {
-  ErrorCode errorCode;
+    ErrorCode errorCode;
 
-  public BackendRuntimeException(String message, ErrorCode errorCode) {
-    super(message);
+    public BackendRuntimeException(String message, ErrorCode errorCode) {
+        super(message);
 
-    this.errorCode = errorCode;
-  }
+        this.errorCode = errorCode;
+    }
 }
