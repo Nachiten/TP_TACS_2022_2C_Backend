@@ -23,28 +23,26 @@ public class StatisticsService {
         Iterable<Match> matches = matchRepository.findAll();
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime hoursAgo = now.minusHours(hours);
+        LocalDateTime minTime = now.minusHours(hours);
 
-        long players =
-            StreamSupport.stream(matches.spliterator(), false)
-                .flatMap(match -> match.getPlayers().stream())
-                .distinct()
-                .filter(player -> player.getCreationDate().isAfter(hoursAgo))
-                .count();
+        // TODO - Hacer con query de MONGO DB
+        // Obtener todos los jugadores que fueron creados despues de "minTime"
+        long players = StreamSupport.stream(matches.spliterator(), false)
+            .flatMap(match -> match.getPlayers().stream())
+            .distinct()
+            .filter(player -> player.getCreationDate().isAfter(minTime))
+            .count();
 
         return new PlayerStatisticsDTO(players, now);
     }
 
     public MatchesStatisticsDTO getMatchesCreatedInLastHours(int hours) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime hoursAgo = now.minusHours(hours);
+        LocalDateTime minTime = now.minusHours(hours);
 
-        // Get the count of matches created in the last hours
-        long matchesCreated =
-            StreamSupport.stream(matchRepository.findAll().spliterator(), false)
-                .filter(match -> match.getCreationDate().isAfter(hoursAgo))
-                .count();
+        Iterable<Match> matches = matchRepository.findAllByCreationDateGreaterThan(minTime);
+        long matchesCount = StreamSupport.stream(matches.spliterator(), false).count();
 
-        return new MatchesStatisticsDTO(matchesCreated, now);
+        return new MatchesStatisticsDTO(matchesCount, now);
     }
 }

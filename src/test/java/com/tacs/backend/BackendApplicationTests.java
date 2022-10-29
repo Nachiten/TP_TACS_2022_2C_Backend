@@ -1,29 +1,24 @@
 package com.tacs.backend;
 
-import com.fasterxml.jackson.core.format.MatchStrength;
 import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.PlayerStatisticsDTO;
 import com.tacs.backend.dto.creation.MatchCreationDTO;
 import com.tacs.backend.dto.creation.PlayerCreationDTO;
+import com.tacs.backend.exception.ConflictException;
+import com.tacs.backend.exception.EntityNotFoundException;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
-import com.tacs.backend.repository.MatchRepository;
 import com.tacs.backend.service.MatchService;
 import com.tacs.backend.service.StatisticsService;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,65 +28,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @WebAppConfiguration
 class BackendApplicationTests {
 
+    static Match match1, match2, match3;
+    static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
+    static int statisticsHours = 2;
     @Autowired
     private MatchService matchService;
     @Autowired
     private StatisticsService statisticsService;
-
-    @Autowired
-    private MatchRepository matchRepository;
-
-    static Match match1, match2, match3;
-    static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
-    static int matchesStatsBefore, playersStatsBefore;
-
-    static int hours = 2;
-
-    private static ArrayList<Match> matches = new ArrayList<>();
-    private static int lastId = 1;
-
-    // Setup before all tests
-    @Test
-    void _00_initial_setup() {
-        Mockito.when(matchRepository.findAll()).thenReturn(matches);
-        Mockito.when(matchRepository.save(Mockito.any(Match.class))).thenAnswer(i -> {
-            Match match = i.getArgument(0);
-
-            // See if there is already a match with id
-            Optional<Match> existingMatch = matches.stream().filter(m -> m.getId().equals(match.getId())).findFirst();
-
-            if (existingMatch.isPresent()) {
-                // If there is, replace it
-                matches.set(matches.indexOf(existingMatch.get()), match);
-                System.out.println("EXISTING Match saved: " + match);
-            } else {
-                // If not, add it
-                match.setId(String.valueOf(lastId++));
-                matches.add(match);
-
-                System.out.println("NEW Match saved: " + match);
-            }
-
-            return match;
-        });
-        Mockito.when(matchRepository.findById(Mockito.anyString())).thenAnswer(i -> {
-            String id = i.getArgument(0);
-            System.out.println("Match searched: " + id);
-            return matches.stream().filter(m -> m.getId().equals(id)).findFirst();
-        });
-    }
-
-    @Test
-    void _0_get_statistics_before_tests() {
-        PlayerStatisticsDTO playerStatistics = statisticsService.getPlayersCreatedInLastHours(hours);
-        MatchesStatisticsDTO matchStatistics = statisticsService.getMatchesCreatedInLastHours(hours);
-
-        matchesStatsBefore = (int) matchStatistics.getMatchesCreated();
-        playersStatsBefore = (int) playerStatistics.getPlayersEnrolled();
-
-        System.out.println("Matches before tests: " + matchesStatsBefore);
-        System.out.println("Players before tests: " + playersStatsBefore);
-    }
 
     @Test
     void _1_create_three_matches() {
@@ -111,22 +54,15 @@ class BackendApplicationTests {
         assertEquals("Calle Corrientes", match1.getLocation());
         assertEquals("Calle Camargo", match2.getLocation());
         assertEquals("Calle Florida", match3.getLocation());
-
-        // Print the id of each match
-        System.out.println("Match 1 id: " + match1.getId());
-        System.out.println("Match 2 id: " + match2.getId());
-        System.out.println("Match 3 id: " + match3.getId());
     }
 
     @Test
     void _2_create_match_with_error() {
-        try {
+        assertThrows(ConflictException.class, () -> {
             LocalDateTime dateTime = LocalDateTime.now();
 
-            Match match = matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Corrientes"));
-        } catch (Exception e) {
-            assertEquals("The match starting date is before now.", e.getMessage());
-        }
+            matchService.createMatch(new MatchCreationDTO(dateTime, "Calle Corrientes"));
+        });
     }
 
     @Test
@@ -135,40 +71,15 @@ class BackendApplicationTests {
         String match2ID = match2.getId();
         String match3ID = match3.getId();
 
-        // Print the id of each match
-        System.out.println("Match 1 id: " + match1ID);
-        System.out.println("Match 2 id: " + match2ID);
-        System.out.println("Match 3 id: " + match3ID);
-
-        player1 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("123465129"), "juanperez@gmail.com"), match1ID);
-        player2 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("456892"), "pedrito@gmail.com"), match1ID);
-        player3 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("5555"), "rodri@gmail.com"), match1ID);
-
-        player4 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("999853"), "ramiro@gmail.com"), match2ID);
-        player5 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("28483"), "joaquin@gmail.com"), match2ID);
-        player6 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("1231254"), "camilo@gmail.com"), match2ID);
-
-        player7 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("9999"), "julieta@gmail.com"), match3ID);
-        player8 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("8888"), "romina@gmail.com"), match3ID);
-        player9 =
-            matchService.createPlayer(
-                new PlayerCreationDTO(Long.parseLong("7777"), "jessica@gmail.com"), match3ID);
+        player1 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("123465129"), "juanperez@gmail.com"), match1ID);
+        player2 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("456892"), "pedrito@gmail.com"), match1ID);
+        player3 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("5555"), "rodri@gmail.com"), match1ID);
+        player4 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("999853"), "ramiro@gmail.com"), match2ID);
+        player5 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("28483"), "joaquin@gmail.com"), match2ID);
+        player6 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("1231254"), "camilo@gmail.com"), match2ID);
+        player7 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("9999"), "julieta@gmail.com"), match3ID);
+        player8 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("8888"), "romina@gmail.com"), match3ID);
+        player9 = matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7777"), "jessica@gmail.com"), match3ID);
 
         assertNotNull(player1);
         assertNotNull(player2);
@@ -193,15 +104,42 @@ class BackendApplicationTests {
 
     @Test
     void _4_get_player_statistics_after_tests() {
-        PlayerStatisticsDTO playerStatistics = statisticsService.getPlayersCreatedInLastHours(hours);
+        PlayerStatisticsDTO playerStatistics = statisticsService.getPlayersCreatedInLastHours(statisticsHours);
 
-        assertEquals(playersStatsBefore + 9, playerStatistics.getPlayersEnrolled());
+        assertEquals(9, playerStatistics.getPlayersEnrolled());
     }
 
     @Test
     void _5_get_match_statistics_after_tests() {
-        MatchesStatisticsDTO match = statisticsService.getMatchesCreatedInLastHours(hours);
+        MatchesStatisticsDTO match = statisticsService.getMatchesCreatedInLastHours(statisticsHours);
 
-        assertEquals(matchesStatsBefore + 3, match.getMatchesCreated());
+        assertEquals(3, match.getMatchesCreated());
+    }
+
+    @Test
+    void _6_get_non_existent_match() {
+        assertThrows(EntityNotFoundException.class, () -> {
+            matchService.getMatch("nonExistantMatch");
+        });
+    }
+
+    @Test
+    void _7_create_existent_matches() {
+        assertThrows(ConflictException.class, () ->
+            matchService.createMatch(new MatchCreationDTO(match1.getStartingDateTime(), match1.getLocation()))
+        );
+        assertThrows(ConflictException.class, () ->
+            matchService.createMatch(new MatchCreationDTO(match2.getStartingDateTime(), match2.getLocation()))
+        );
+        assertThrows(ConflictException.class, () ->
+            matchService.createMatch(new MatchCreationDTO(match3.getStartingDateTime(), match3.getLocation()))
+        );
+    }
+
+    @Test
+    void _8_create_existent_players() {
+        assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player1.getPhoneNumber(), player1.getEmail()), match1.getId()));
+        assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player4.getPhoneNumber(), player4.getEmail()), match2.getId()));
+        assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player7.getPhoneNumber(), player7.getEmail()), match3.getId()));
     }
 }
