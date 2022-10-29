@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @WebAppConfiguration
-class BackendApplicationTests {
+class BackendApplicationServiceTests {
 
     static Match match1, match2, match3;
     static Player player1, player2, player3, player4, player5, player6, player7, player8, player9;
@@ -37,7 +38,7 @@ class BackendApplicationTests {
     private StatisticsService statisticsService;
 
     @Test
-    void _1_create_three_matches() {
+    void _01_create_three_matches() {
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime tomorrow = dateTime.plusDays(1);
 
@@ -57,7 +58,7 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _2_create_match_with_invalid_date() {
+    void _02_create_match_with_invalid_date() {
         assertThrows(ConflictException.class, () -> {
             LocalDateTime dateTime = LocalDateTime.now();
 
@@ -66,7 +67,7 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _3_add_three_players_to_each_match() {
+    void _03_add_three_players_to_each_match() {
         String match1ID = match1.getId();
         String match2ID = match2.getId();
         String match3ID = match3.getId();
@@ -103,21 +104,21 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _4_get_player_statistics_after_tests() {
+    void _04_get_player_statistics_after_tests() {
         PlayerStatisticsDTO playerStatistics = statisticsService.getPlayersCreatedInLastHours(statisticsHours);
 
         assertEquals(9, playerStatistics.getPlayersEnrolled());
     }
 
     @Test
-    void _5_get_match_statistics_after_tests() {
+    void _05_get_match_statistics_after_tests() {
         MatchesStatisticsDTO match = statisticsService.getMatchesCreatedInLastHours(statisticsHours);
 
         assertEquals(3, match.getMatchesCreated());
     }
 
     @Test
-    void _6_get_non_existent_match() {
+    void _06_get_non_existent_match() {
         assertThrows(EntityNotFoundException.class, () -> {
             matchService.getMatch("nonExistantMatch");
         });
@@ -130,7 +131,7 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _7_create_existent_matches() {
+    void _07_create_existent_matches() {
         assertThrows(ConflictException.class, () ->
             matchService.createMatch(new MatchCreationDTO(match1.getStartingDateTime(), match1.getLocation()))
         );
@@ -143,14 +144,14 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _8_create_existent_players() {
+    void _08_create_existent_players() {
         assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player1.getPhoneNumber(), player1.getEmail()), match1.getId()));
         assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player4.getPhoneNumber(), player4.getEmail()), match2.getId()));
         assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player7.getPhoneNumber(), player7.getEmail()), match3.getId()));
     }
 
     @Test
-    void _9_create_player_with_invalid_match() {
+    void _09_create_player_with_invalid_match() {
         assertThrows(EntityNotFoundException.class, () ->
             matchService.createPlayer(
                 new PlayerCreationDTO(Long.parseLong("123465129"),
@@ -158,8 +159,51 @@ class BackendApplicationTests {
     }
 
     // TODO - First 10 players to join a match are regular
+    @Test
+    void _10_first_10_players_in_match_are_regular() {
+        String match1ID = match1.getId();
 
-    // TODO - Players 11 to 13 are substitutes
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("999853"), "ramiro@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("28483"), "joaquin@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("1231254"), "camilo@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("9999"), "julieta@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("8888"), "romina@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7777"), "jessica@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("12345"), "jorge@gmail.com"), match1ID);
 
-    // TODO - Player 14 is not allowed to join the match
+        // Assert that all players are regular
+        List<Player> players = matchService.getMatch(match1ID).getPlayers();
+
+        for (Player player : players) {
+            assertTrue(player.getIsRegular());
+        }
+    }
+
+    @Test
+    void _11_players_11_to_13_are_substitutes(){
+        String match1ID = match1.getId();
+
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7865"), "ramiro12@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7865123"), "joaquin12@gmail.com"), match1ID);
+        matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("78901"), "camilo12@gmail.com"), match1ID);
+
+        List<Player> players = matchService.getMatch(match1ID).getPlayers();
+
+        // Substitute is not regular
+        for (int i = 10; i < 13; i++) {
+            assertFalse(players.get(i).getIsRegular());
+        }
+    }
+
+    @Test
+    void _12_match_is_full_with_13_players() {
+        String match1ID = match1.getId();
+
+        assertThrows(ConflictException.class, () ->
+            matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7865"), "ramiro12@gmail.com"), match1ID));
+        assertThrows(ConflictException.class, () ->
+            matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("123"), "jorgegracia@gmail.com"), match1ID));
+        assertThrows(ConflictException.class, () ->
+            matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("333"), "jorgeramirez@gmail.com"), match1ID));
+    }
 }

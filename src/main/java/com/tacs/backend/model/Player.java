@@ -16,7 +16,7 @@ import lombok.*;
 public class Player implements Serializable {
 
     @Schema(description = "Date in which the player was created")
-    public LocalDateTime creationDate;
+    LocalDateTime creationDate;
 
     @Schema(description = "Match in which the player will play", required = true)
     String matchId;
@@ -29,7 +29,7 @@ public class Player implements Serializable {
 
     @Schema(description = "Is the player regular or substitute?", required = true)
     @JsonProperty(value = "isRegular")
-    boolean isRegular;
+    Boolean isRegular;
 
     public Player(String matchId, Long phoneNumber, String email, boolean isRegular) {
         this.matchId = matchId;

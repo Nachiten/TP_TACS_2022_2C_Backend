@@ -17,8 +17,8 @@ import java.util.stream.StreamSupport;
 @Profile("BackendTests")
 @Configuration
 public class BackendApplicationTestConfiguration {
-    private static final ArrayList<Match> matches = new ArrayList<>();
-    private static int lastId = 1;
+    private final ArrayList<Match> matches = new ArrayList<>();
+    private int lastId = 1;
 
     @Bean
     @Primary
@@ -61,7 +61,7 @@ public class BackendApplicationTestConfiguration {
         Mockito.when(matchRepository.countAllPlayersInAllMatchesDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
             LocalDateTime fromDate = i.getArgument(0);
 
-            long players = StreamSupport.stream(matches.spliterator(), false)
+            long players = matches.stream()
                 .flatMap(match -> match.getPlayers().stream())
                 .distinct()
                 .filter(player -> player.getCreationDate().isAfter(fromDate))

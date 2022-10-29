@@ -102,6 +102,7 @@ public class MatchController {
                 content = @Content)
         })
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public Match createMatch(@Valid @RequestBody MatchCreationDTO match) {
         return matchService.createMatch(match);
     }
