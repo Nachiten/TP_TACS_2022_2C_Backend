@@ -4,12 +4,11 @@ import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.PlayerStatisticsDTO;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.stream.StreamSupport;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsService {
@@ -42,7 +41,7 @@ public class StatisticsService {
         Iterable<Match> matches = matchRepository.findAllByCreationDateGreaterThan(minTime);
 
         long matchesCount = StreamSupport.stream(matches.spliterator(), false).count();
-        
+
         return new MatchesStatisticsDTO(matchesCount, now);
     }
 }

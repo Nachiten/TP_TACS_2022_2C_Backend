@@ -8,16 +8,15 @@ import com.tacs.backend.model.ErrorCode;
 import com.tacs.backend.model.Match;
 import com.tacs.backend.model.Player;
 import com.tacs.backend.repository.MatchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 public class MatchService {

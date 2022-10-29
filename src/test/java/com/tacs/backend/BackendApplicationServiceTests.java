@@ -180,7 +180,7 @@ class BackendApplicationServiceTests {
     }
 
     @Test
-    void _11_players_11_to_13_are_substitutes(){
+    void _11_players_11_to_13_are_substitutes() {
         String match1ID = match1.getId();
 
         matchService.createPlayer(new PlayerCreationDTO(Long.parseLong("7865"), "ramiro12@gmail.com"), match1ID);

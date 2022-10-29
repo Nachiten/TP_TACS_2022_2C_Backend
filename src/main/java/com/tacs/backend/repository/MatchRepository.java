@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public interface MatchRepository extends MongoRepository<Match, String> {
     Iterable<Match> findAllByCreationDateGreaterThan(LocalDateTime fromDate);
 
-    @Aggregation(pipeline = { "{ $unwind: '$players' }", "{ $match: { creationDate: { $gte: ?0 } } }", "{ $group: { _id: null , count: { $sum: 1 } } }" })
+    @Aggregation(pipeline = {"{ $unwind: '$players' }", "{ $match: { creationDate: { $gte: ?0 } } }", "{ $group: { _id: null , count: { $sum: 1 } } }"})
     Long countAllPlayersInAllMatchesDateGreaterThan(LocalDateTime fromDate);
 }
