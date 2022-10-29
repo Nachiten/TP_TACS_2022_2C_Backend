@@ -1,7 +1,9 @@
 package com.tacs.backend.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,8 @@ import lombok.Setter;
 @Setter
 @Schema(description = "Players statistics")
 public class PlayerStatisticsDTO {
-  @Schema(description = "Number of players enrolled in the last two hours")
-  long playersEnrolled;
+    @Schema(description = "Number of players enrolled in the last two hours")
+    long playersEnrolled;
 
-  LocalDateTime now;
+    LocalDateTime now;
 }
