@@ -19,6 +19,6 @@ spring:
 
   data:
     mongodb:
-      uri: "mongodb://root:example@127.0.0.1:27017/tacs?retryWrites=true&w=majority&authSource=admin"
+      uri: ${MONGODB_URI}
 
 
