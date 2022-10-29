@@ -25,13 +25,12 @@ public class StatisticsService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minTime = now.minusHours(hours);
 
-        // TODO - Hacer con query de MONGO DB
-        // Obtener todos los jugadores que fueron creados despues de "minTime"
-        long players = StreamSupport.stream(matches.spliterator(), false)
-            .flatMap(match -> match.getPlayers().stream())
-            .distinct()
-            .filter(player -> player.getCreationDate().isAfter(minTime))
-            .count();
+        Long players = matchRepository.countAllPlayersInAllMatchesDateGreaterThan(minTime);
+
+        // DB Returns null in case there are 0 players
+        if (players == null) {
+            players = 0L;
+        }
 
         return new PlayerStatisticsDTO(players, now);
     }

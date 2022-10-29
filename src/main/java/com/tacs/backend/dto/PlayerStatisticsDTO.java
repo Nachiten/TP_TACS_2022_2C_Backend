@@ -16,7 +16,7 @@ import lombok.Setter;
 @Schema(description = "Players statistics")
 public class PlayerStatisticsDTO {
     @Schema(description = "Number of players enrolled in the last two hours")
-    long playersEnrolled;
+    Long playersEnrolled;
 
     LocalDateTime now;
 }

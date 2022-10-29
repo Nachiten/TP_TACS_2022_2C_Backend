@@ -121,6 +121,12 @@ class BackendApplicationTests {
         assertThrows(EntityNotFoundException.class, () -> {
             matchService.getMatch("nonExistantMatch");
         });
+        assertThrows(EntityNotFoundException.class, () -> {
+            matchService.getMatch("nonExistantMatch2");
+        });
+        assertThrows(EntityNotFoundException.class, () -> {
+            matchService.getMatch("nonExistantMatch3");
+        });
     }
 
     @Test
@@ -142,4 +148,18 @@ class BackendApplicationTests {
         assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player4.getPhoneNumber(), player4.getEmail()), match2.getId()));
         assertThrows(ConflictException.class, () -> matchService.createPlayer(new PlayerCreationDTO(player7.getPhoneNumber(), player7.getEmail()), match3.getId()));
     }
+
+    @Test
+    void _9_create_player_with_invalid_match() {
+        assertThrows(EntityNotFoundException.class, () ->
+            matchService.createPlayer(
+                new PlayerCreationDTO(Long.parseLong("123465129"),
+                    "email"), "nonExistantMatch"));
+    }
+
+    // TODO - First 10 players to join a match are regular
+
+    // TODO - Players 11 to 13 are substitutes
+
+    // TODO - Player 14 is not allowed to join the match
 }

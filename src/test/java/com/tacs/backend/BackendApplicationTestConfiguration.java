@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Profile("BackendTests")
 @Configuration
@@ -55,6 +56,19 @@ public class BackendApplicationTestConfiguration {
             LocalDateTime fromDate = i.getArgument(0);
             System.out.println("Matches searched with creation date greater than: " + fromDate);
             return matches.stream().filter(m -> m.getCreationDate().isAfter(fromDate)).collect(Collectors.toList());
+        });
+
+        Mockito.when(matchRepository.countAllPlayersInAllMatchesDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
+            LocalDateTime fromDate = i.getArgument(0);
+
+            long players = StreamSupport.stream(matches.spliterator(), false)
+                .flatMap(match -> match.getPlayers().stream())
+                .distinct()
+                .filter(player -> player.getCreationDate().isAfter(fromDate))
+                .count();
+
+            System.out.println("Players searched with creation date greater than: " + fromDate);
+            return players;
         });
 
         return matchRepository;
