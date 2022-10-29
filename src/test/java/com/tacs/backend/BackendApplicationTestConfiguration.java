@@ -54,7 +54,7 @@ public class BackendApplicationTestConfiguration {
         Mockito.when(matchRepository.findAllByCreationDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
             LocalDateTime fromDate = i.getArgument(0);
             System.out.println("Matches searched with creation date greater than: " + fromDate);
-            return matches.stream().filter(m -> m.getCreationDate().isAfter(fromDate)).collect(Collectors.toList());
+            return matches.stream().filter(m -> m.getCreationDate().isAfter(fromDate));
         });
 
         return matchRepository;

@@ -57,7 +57,7 @@ class BackendApplicationTests {
     }
 
     @Test
-    void _2_create_match_with_error() {
+    void _2_create_match_with_invalid_date() {
         assertThrows(ConflictException.class, () -> {
             LocalDateTime dateTime = LocalDateTime.now();
 

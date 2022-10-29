@@ -41,8 +41,9 @@ public class StatisticsService {
         LocalDateTime minTime = now.minusHours(hours);
 
         Iterable<Match> matches = matchRepository.findAllByCreationDateGreaterThan(minTime);
-        long matchesCount = StreamSupport.stream(matches.spliterator(), false).count();
 
+        long matchesCount = StreamSupport.stream(matches.spliterator(), false).count();
+        
         return new MatchesStatisticsDTO(matchesCount, now);
     }
 }

@@ -106,32 +106,6 @@ public class MatchController {
         return matchService.createMatch(match);
     }
 
-//    @Operation(summary = "Delete a match by its id")
-//    @ApiResponses(
-//        value = {
-//            @ApiResponse(responseCode = "204", description = "Deleted the match", content = @Content),
-//            @ApiResponse(
-//                responseCode = "400",
-//                description = "Invalid id supplied",
-//                content =
-//                @Content(
-//                    schema = @Schema(implementation = ExceptionDTO.class),
-//                    mediaType = "application/json")),
-//            @ApiResponse(responseCode = "404", description = "Match not found", content = @Content),
-//            @ApiResponse(
-//                responseCode = "500",
-//                description = "Internal server error",
-//                content =
-//                @Content(
-//                    schema = @Schema(implementation = ExceptionDTO.class),
-//                    mediaType = "application/json"))
-//        })
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-//    public void deleteMatch(@PathVariable String id) {
-//        matchService.deleteMatch(id);
-//    }
-
     @Operation(summary = "Create a new player")
     @ApiResponses(
         value = {
