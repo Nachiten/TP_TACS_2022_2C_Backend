@@ -1,4 +1,4 @@
-package com.tacs.backend.TelegramBot;
+package com.tacs.backend.TelegramBot.CORE;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,18 +20,21 @@ public class TelegramBoot extends TelegramLongPollingBot {
 
         // System.out.println(Math.toIntExact(usersSesionActive.quantityIdUsers(chatId)));
         //Math.toIntExact(usersSesionActive.quantityIdUsers(chatId))
-           if(!usersSesionActive.existsIdUser(chatId)) {
+           if (!usersSesionActive.existsIdUser(chatId)) {
                System.out.println("ingresa un nuevo cliente");
                String response = usersSesionActive.newSesion(chatId, dataReceive);
                message.setChatId(chatId);
                message.setText(response);
-               System.out.println(response);
+               //System.out.println(response);
 
 
            } else {
                 // ya hay una conversacion en curso
+               //System.out.println("entro en la segunda opcion");
+               //System.out.println(dataReceive + "yyyyyyyyyy");
                String respond = usersSesionActive.deliverMessage(dataReceive, chatId);
-               System.out.println("entro en la segunda opcion");
+
+
                message.setChatId(chatId);
                message.setText(respond);
            }

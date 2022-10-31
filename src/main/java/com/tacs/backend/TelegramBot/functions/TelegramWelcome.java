@@ -1,4 +1,6 @@
-package com.tacs.backend.TelegramBot;
+package com.tacs.backend.TelegramBot.functions;
+
+import com.tacs.backend.TelegramBot.CORE.UsersSessions;
 
 public class TelegramWelcome implements TelegramMessage{
     long userID = 0;
@@ -18,7 +20,7 @@ public class TelegramWelcome implements TelegramMessage{
 
 
     @Override
-    public TelegramMessage sendText(String text, long userID,UsersSessions usersSessions) {
+    public TelegramMessage sendText(String text, long userID, UsersSessions usersSessions) {
 
 
        if("1".equals(text)) {
@@ -29,6 +31,7 @@ public class TelegramWelcome implements TelegramMessage{
 
         // finalizo la opcion actual y se genera la elegida por el usuario
         usersSessions.upSesion(this,tm);
+        tm.setNextMessage();
         //usersSessions.deliverMessage(text,userID);
         return tm;
        } else if ("2".equals(text)) {
@@ -39,15 +42,31 @@ public class TelegramWelcome implements TelegramMessage{
            usersSessions.upSesion(this,tm);
            tm.setNextMessage();
            //usersSessions.deliverMessage(text,userID);
-            return tm;
+           return tm;
+
+
 
        } else if ("3".equals(text)) {
-           // salir
+           // anotarse a un partido
+           TelegramMessage tm = new TelegramJoinMatch();
+           tm.setUserID(userID);
+           // finalizo la opcion actual y se genera la elegida por el usuario
+           usersSessions.upSesion(this,tm);
+           tm.setNextMessage();
+
+           //usersSessions.deliverMessage(text,userID);
+
+
+
+
+           return tm;
+
+
        }else {
            this.responseMessage = "opcion incorrecta escriba nuevamente";
            return this;
        }
-    return this;
+
     }
 
     @Override
@@ -57,7 +76,7 @@ public class TelegramWelcome implements TelegramMessage{
 
     @Override
     public void setNextMessage() {
-       this.responseMessage= "Bienvenido a la tacs-app que desea realizar? : 1) crear un partido 2) anotarse a un partido 3) salir";
+       this.responseMessage= "Bienvenido al TACS BOT de la app Fotball, ¿ Que desea realizar ? : 1) crear un partido 2) ver detalles de un partido 3) anotarse a un partido";
     }
 
     @Override

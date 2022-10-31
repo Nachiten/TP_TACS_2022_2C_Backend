@@ -1,5 +1,8 @@
-package com.tacs.backend.TelegramBot;
+package com.tacs.backend.TelegramBot.CORE;
 
+
+import com.tacs.backend.TelegramBot.functions.TelegramMessage;
+import com.tacs.backend.TelegramBot.functions.TelegramWelcome;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -14,6 +17,8 @@ public class UsersSessions {
 
 
         for(TelegramMessage elem : messageTextReceived ){
+
+
             if(elem.getUserID() == id) return true;
 
         }
@@ -26,14 +31,10 @@ public class UsersSessions {
 
     public String deliverMessage(String text, long idUser){
         var objMsg = this.searchSesionUser(idUser);
-        //System.out.println("el id antes de procesar es: " + objMsg.get().responseMessage());
-        var response = objMsg.get().sendText(text,idUser, this);
-        //System.out.println("cantidad de opciones por id:   ");
-        //System.out.println(messageTextReceived.stream().count());
+        //System.out.println(text + "dasdasdsas"); //aca no llega el text
 
-        //System.out.println(response.responseMessage());
-        // borrar los mensajes terminados que se hayan terminado
-        //this.deleteFinishSesion();//se borran las sesiones si estan finalizadas
+        //System.out.println(objMsg.get().sendText() + "existe el objeto");
+        var response = objMsg.get().sendText(text,idUser, this);
         return response.responseMessage();
     }
 
@@ -48,6 +49,9 @@ public class UsersSessions {
     }
 
     public void deleteFinishSesion(TelegramMessage tm) {
+        // se envia la informacion al back. si hay un error se envia al menu principal mostrando un error y se cierra la session actual
+        
+
         this.messageTextReceived.remove(tm);
     }
 
