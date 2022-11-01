@@ -10,5 +10,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HealthDTO {
-  String status;
+    String status;
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConflictException extends BackendRuntimeException {
 
-  public ConflictException(String message, ErrorCode errorCode) {
-    super(message, errorCode);
-  }
+    public ConflictException(String message, ErrorCode errorCode) {
+        super(message, errorCode);
+    }
 }
