@@ -18,15 +18,11 @@ public class StatisticsService {
 
     public PlayerStatisticsDTO getPlayersCreatedInLastHours(int hours) {
 
-        // Get all matches, merge all players in one list
-        Iterable<Match> matches = matchRepository.findAll();
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minTime = now.minusHours(hours);
 
         Long players = matchRepository.countAllPlayersInAllMatchesDateGreaterThan(minTime);
 
-        // DB Returns null in case there are 0 players
         if (players == null) {
             players = 0L;
         }
@@ -38,10 +34,12 @@ public class StatisticsService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minTime = now.minusHours(hours);
 
-        Iterable<Match> matches = matchRepository.findAllByCreationDateGreaterThan(minTime);
+        Long matches = matchRepository.countAllMatchesCreatedDateGreaterThan(minTime);
 
-        long matchesCount = StreamSupport.stream(matches.spliterator(), false).count();
+        if (matches == null) {
+            matches = 0L;
+        }
 
-        return new MatchesStatisticsDTO(matchesCount, now);
+        return new MatchesStatisticsDTO(matches, now);
     }
 }
