@@ -2,13 +2,11 @@ package com.tacs.backend.service;
 
 import com.tacs.backend.dto.MatchesStatisticsDTO;
 import com.tacs.backend.dto.PlayerStatisticsDTO;
-import com.tacs.backend.model.Match;
 import com.tacs.backend.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.stream.StreamSupport;
 
 @Service
 public class StatisticsService {

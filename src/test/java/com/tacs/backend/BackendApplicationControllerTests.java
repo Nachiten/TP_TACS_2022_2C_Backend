@@ -81,4 +81,10 @@ public class BackendApplicationControllerTests {
             throw new RuntimeException(e);
         }
     }
+
+    /* TODO - Add tests:
+        - Create valid player
+        - Create invalid player
+        - Get valid statistics
+     */
 }

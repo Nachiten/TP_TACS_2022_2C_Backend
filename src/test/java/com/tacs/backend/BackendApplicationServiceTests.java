@@ -158,7 +158,6 @@ class BackendApplicationServiceTests {
                     "email"), "nonExistantMatch"));
     }
 
-    // TODO - First 10 players to join a match are regular
     @Test
     void _10_first_10_players_in_match_are_regular() {
         String match1ID = match1.getId();
