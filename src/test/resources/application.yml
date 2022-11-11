@@ -16,9 +16,3 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
-
-
