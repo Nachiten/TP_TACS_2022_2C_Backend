@@ -1,6 +1,7 @@
 package com.tacs.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tacs.backend.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,5 +56,14 @@ public class Player implements Serializable {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return
+            "    - Creation Date: " + DateUtils.localDateTimeToString(creationDate) + "\n" +
+            "    - Phone Number: " + phoneNumber + "\n" +
+            "    - Email: " + email + "\n" +
+            "    - Is Regular?: " + isRegular + "\n\n";
     }
 }
