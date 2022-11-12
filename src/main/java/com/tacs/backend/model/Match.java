@@ -1,5 +1,6 @@
 package com.tacs.backend.model;
 
+import com.tacs.backend.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -50,5 +51,19 @@ public class Match implements Serializable {
 
         this.creationDate = LocalDateTime.now();
         this.players = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder playersString = new StringBuilder();
+
+        for (Player player : players)
+            playersString.append(player.toString());
+
+        return  "- ID: " + id + "\n" +
+                "- Creation Date: " + DateUtils.localDateTimeToString(creationDate) +  "\n" +
+                "- Starting Date: " + DateUtils.localDateTimeToString(creationDate) + "\n" +
+                "- Location: " + location + "\n" +
+                "- Players: \n" + playersString;
     }
 }
