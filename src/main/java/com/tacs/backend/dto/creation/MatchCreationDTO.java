@@ -25,3 +25,4 @@ public class MatchCreationDTO {
     @Schema(description = "Where the match will be played", required = true)
     String location;
 }
+

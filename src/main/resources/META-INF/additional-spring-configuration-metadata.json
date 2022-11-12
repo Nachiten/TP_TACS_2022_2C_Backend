@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "timeZone",
+    "type": "java.lang.String",
+    "description": "A description for 'timeZone'"
+  },
+  {
+    "name": "bot.token",
+    "type": "java.lang.String",
+    "description": "A description for 'bot.token'"
+  }
+]}

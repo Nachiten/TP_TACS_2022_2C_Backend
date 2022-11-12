@@ -21,4 +21,6 @@ spring:
     mongodb:
       uri: ${MONGODB_URI}
 
+bot:
+  token: ${TELEGRAM_TOKEN}
 

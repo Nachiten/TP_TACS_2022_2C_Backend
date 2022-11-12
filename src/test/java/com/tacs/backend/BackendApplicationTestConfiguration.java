@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Profile("BackendTests")
 @Configuration
@@ -51,10 +50,13 @@ public class BackendApplicationTestConfiguration {
             return getMatchById(id);
         });
 
-        Mockito.when(matchRepository.findAllByCreationDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
+        Mockito.when(matchRepository.countAllMatchesCreatedDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
             LocalDateTime fromDate = i.getArgument(0);
             System.out.println("Matches searched with creation date greater than: " + fromDate);
-            return matches.stream().filter(m -> m.getCreationDate().isAfter(fromDate)).collect(Collectors.toList());
+            int arraySize = matches.stream().filter(m -> m.getCreationDate().isAfter(fromDate)).toList().size();
+
+            // Return arraySize as Long
+            return (long) arraySize;
         });
 
         Mockito.when(matchRepository.countAllPlayersInAllMatchesDateGreaterThan(Mockito.any(LocalDateTime.class))).thenAnswer(i -> {
