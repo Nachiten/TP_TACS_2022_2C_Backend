@@ -327,6 +327,87 @@ public class BackendApplicationControllerTests {
                 .value(containsString("'hours' parameter is missing of type int")));
   }
 
+  @Test
+  public void _22_should_return_startingDateTime_not_null() throws Exception {
+
+    String matchCreation = "{\"startingDateTime\": null,\"location\": \"abc\"}";
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/matches")
+                .content(matchCreation)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errorCode").value("INVALID_BODY"))
+        .andExpect(
+            jsonPath("$.message").value(containsString("startingDateTime: must not be null")));
+    ;
+  }
+
+  @Test
+  public void _23_should_return_location_not_null() throws Exception {
+
+    String matchCreation = "{\"startingDateTime\": \"2023-09-17T21:18\",\"location\": null}";
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/matches")
+                .content(matchCreation)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errorCode").value("INVALID_BODY"))
+        .andExpect(jsonPath("$.message").value(containsString("location: must not be null")));
+    ;
+  }
+
+  @Test
+  public void _24_should_return_location_not_empty() throws Exception {
+
+    String matchCreation = "{\"startingDateTime\": \"2023-09-17T21:18\",\"location\": \"\"}";
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/matches")
+                .content(matchCreation)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errorCode").value("INVALID_BODY"))
+        .andExpect(jsonPath("$.message").value(containsString("location: must not be empty")));
+    ;
+  }
+
+  @Test
+  public void _25_should_return_location_not_empty() throws Exception {
+
+    String matchCreation = "{\"startingDateTime\": \"fasgaggas\",\"location\": \"\"}";
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/matches")
+                .content(matchCreation)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void _26_get_match() throws Exception {
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/matches/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value("1"))
+        .andExpect(jsonPath("$.creationDate").exists())
+        .andExpect(jsonPath("$.startingDateTime").exists())
+        .andExpect(jsonPath("$.location").value("abc"));
+  }
+
   public static String asJsonString(final Object obj) {
     try {
       return new ObjectMapper().writeValueAsString(obj);
