@@ -1,5 +1,6 @@
 package com.tacs.backend.telegrambot;
 
+import com.github.kshashov.telegram.api.MessageType;
 import com.github.kshashov.telegram.api.TelegramMvcController;
 import com.github.kshashov.telegram.api.bind.annotation.BotController;
 import com.github.kshashov.telegram.api.bind.annotation.BotPathVariable;
@@ -37,7 +38,12 @@ public class TelegramController  implements TelegramMvcController {
         return token;
     }
 
-    @BotRequest(value = "*")
+    @BotRequest(value = "**")
+    public String anyText() {
+        return "Welcome to TACS Bot. /help for command list";
+    }
+
+    @BotRequest(value = "/**")
     public String invalidCommand() {
         return "Invalid command. /help for command list";
     }
@@ -47,9 +53,9 @@ public class TelegramController  implements TelegramMvcController {
         return "Possible commands:\n/newMatch <startingDateTime>(yyyy-MM-dd HH:mm) <location>: Create new match\n/getMatch <matchId>: Get match info\n/newPlayer <matchId> <phoneNumber> <email>: Create new player\n/statistics <players|matches> <hours>: Get statistics for the last hours\n/help: Get this help";
     }
 
-    @BotRequest(value = "/getMatch*")
-    public String getMatchInvalidCommand() {
-        return "Usage:\n/getMatch <matchId>";
+    @BotRequest(value = "/getMatch{( [\\S]+){0,1}}{$}", type = {MessageType.ANY})
+    public String getMatchByIdWrongArgs() {
+        return "Invalid params. Usage:\n/getMatch <matchId>";
     }
 
     @BotRequest(value = "/getMatch {id:[\\S]+}")
@@ -65,15 +71,9 @@ public class TelegramController  implements TelegramMvcController {
 
     private final String invalidParamsStatistics = "Invalid params. Usage:\n/statistics <players|matches> <hours>";
 
-    // Get statistics in the last hours
-    @BotRequest(value = "/statistics")
-    public String getStatisticsNotEnoughArgs() {
-        return invalidParamsStatistics;
-    }
-
-    @BotRequest(value = "/statistics {statType:[\\S]+} {hours:[\\S]+} *")
-    public String getStatisticsTooManyArgs() {
-        return invalidParamsStatistics;
+    @BotRequest(value = "/statistics{( [\\S]+){0,1}}{$}", type = {MessageType.ANY})
+    public String getStatisticsWrongArgs() {
+        return "Invalid params. Usage:\n/statistics <players|matches> <hours>";
     }
 
     @BotRequest(value = "/statistics {statType:[\\S]+} {hours:[\\S]+}")
@@ -94,12 +94,12 @@ public class TelegramController  implements TelegramMvcController {
         };
     }
 
-    @BotRequest(value = "/newMatch")
-    public String newMatchNotEnoughArgs() {
+    @BotRequest(value = "/newMatch{( [\\S]+){0,2}}{$}", type = {MessageType.ANY})
+    public String newMatchWrongArgs() {
         return "Invalid params. Usage:\n/newMatch <startingDateTime>(yyyy-MM-dd HH:mm) <location>";
     }
 
-    @BotRequest(value = "/newMatch {startingDate:[\\S]+} {startingTime:[\\S]+} {location:[\\S]+}")
+    @BotRequest(value = "/newMatch {startingDate:[\\S]+} {startingTime:[\\S]+} {location:[\\S]+}", type = {MessageType.MESSAGE})
     public SendMessage newMatch(@BotPathVariable("startingDate") String startingDate, @BotPathVariable("startingTime") String startingTime , @BotPathVariable("location") String location, Chat chat) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -125,24 +125,24 @@ public class TelegramController  implements TelegramMvcController {
         }
     }
 
-    @BotRequest(value = "/newPlayer")
-    public String newPlayerNotEnoughArgs() {
+    @BotRequest(value = "/newPlayer{( [\\S]+){0,2}}{$}", type = {MessageType.ANY})
+    public String newPlayerWrongArgs() {
         return "Invalid params. Usage:\n/newPlayer <matchId> <phoneNumber> <email>";
     }
 
     @BotRequest(value = "/newPlayer {matchId:[\\S]+} {phoneNumber:[\\S]+} {email:[\\S]+}")
     public SendMessage newPlayer(@BotPathVariable("matchId") String matchId, @BotPathVariable("phoneNumber") String phoneNumber , @BotPathVariable("email") String email, Chat chat) {
 
-        Long phoneNumberLong = 0L;
+        long phoneNumberParsed;
 
         try {
-            phoneNumberLong = Long.parseLong(phoneNumber);
+            phoneNumberParsed = Long.parseLong(phoneNumber);
         } catch (NumberFormatException e) {
             return generateMessageResponse("Invalid phone number. Must be a number", chat);
         }
 
         try {
-            Player createdPlayer = matchService.createPlayer(new PlayerCreationDTO(phoneNumberLong, email), matchId);
+            Player createdPlayer = matchService.createPlayer(new PlayerCreationDTO(phoneNumberParsed, email), matchId);
             return generateMessageResponse("Player was enrolled successfully. Is Regular: " + createdPlayer.getIsRegular(), chat);
         } catch (Exception e) {
             return generateMessageResponse("Error enrolling player: " + e.getMessage(), chat);
