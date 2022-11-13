@@ -22,7 +22,7 @@ public class PlayerCreationDTO {
 
     @NotNull
     @NotEmpty
-    @Email(regexp = ".+@.+[\\.].+")
+    @Email(regexp = ".+@.+[.].+")
     @Schema(description = "Email of the user who is playing", required = true)
     String email;
 }

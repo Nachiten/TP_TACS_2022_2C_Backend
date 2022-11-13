@@ -32,11 +32,10 @@ public class MatchService {
         Iterable<Match> matches = getMatches();
 
         if (StreamSupport.stream(matches.spliterator(), false).anyMatch(m -> m.equals(newMatch)))
-            throw new ConflictException("The match already exists.", ErrorCode.MATCH_EXISTENT);
+            throw new ConflictException("Match with the same location and date already exists.", ErrorCode.MATCH_EXISTENT);
 
         if (newMatch.getStartingDateTime().isBefore(LocalDateTime.now()))
-            throw new ConflictException(
-                "The match starting date is before now.", ErrorCode.INVALID_MATCH_DATE);
+            throw new ConflictException("The match starting date is before now.", ErrorCode.INVALID_MATCH_DATE);
 
         return matchRepository.save(newMatch);
     }
@@ -72,15 +71,6 @@ public class MatchService {
         return match.get();
     }
 
-//    public void deleteMatch(String id) {
-//        Optional<Match> match = matchRepository.findById(id);
-//
-//        if (match.isEmpty())
-//            throw new EntityNotFoundException("Match not found", ErrorCode.MATCH_NOT_FOUND);
-//
-//        matchRepository.delete(match.get());
-//    }
-
     public Player createPlayer(PlayerCreationDTO playerCreation, String matchId) {
 
         Match match = getMatch(matchId);
@@ -99,7 +89,7 @@ public class MatchService {
 
     private void checkPlayerExistent(Player player, Match match) {
         if (match.hasPlayer(player)) {
-            throw new ConflictException("Player already exists", ErrorCode.PLAYER_EXISTENT);
+            throw new ConflictException("Player with same phone number OR email already exists.", ErrorCode.PLAYER_EXISTENT);
         }
     }
 
