@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tacs</groupId>
 	<artifactId>backend</artifactId>
-	<version>3.0</version>
+	<version>5.0</version>
 	<name>backend</name>
 	<description>TP Tacs 2022 2C Backend</description>
 	<properties>
@@ -55,13 +55,6 @@
 		</dependency>
 
 		<!-- Telegram bot -->
-
-<!--		<dependency>-->
-<!--			<groupId>org.telegram</groupId>-->
-<!--			<artifactId>telegrambots-spring-boot-starter</artifactId>-->
-<!--			<version>6.1.0</version>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>com.github.kshashov</groupId>
 			<artifactId>spring-boot-starter-telegram</artifactId>

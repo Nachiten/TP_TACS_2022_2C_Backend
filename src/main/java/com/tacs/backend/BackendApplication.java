@@ -1,6 +1,7 @@
 package com.tacs.backend;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ public class BackendApplication {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry
                     .addMapping("/**")
                     .allowedOrigins("http://localhost:4200", "http://192.168.92.3:80")

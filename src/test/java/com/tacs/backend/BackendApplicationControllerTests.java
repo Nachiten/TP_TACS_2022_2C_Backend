@@ -208,7 +208,7 @@ public class BackendApplicationControllerTests {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.errorCode").value("PLAYER_EXISTENT"))
-        .andExpect(jsonPath("$.message").value(containsString("Player already exists")));
+        .andExpect(jsonPath("$.message").value(containsString("Player with same phone number OR email already exists.")));
   }
 
   @Test
@@ -223,7 +223,7 @@ public class BackendApplicationControllerTests {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.errorCode").value("PLAYER_EXISTENT"))
-        .andExpect(jsonPath("$.message").value(containsString("Player already exists")));
+        .andExpect(jsonPath("$.message").value(containsString("Player with same phone number OR email already exists.")));
   }
 
   @Test
