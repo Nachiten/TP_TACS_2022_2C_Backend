@@ -119,15 +119,9 @@ class BackendApplicationServiceTests {
 
     @Test
     void _06_get_non_existent_match() {
-        assertThrows(EntityNotFoundException.class, () -> {
-            matchService.getMatch("nonExistantMatch");
-        });
-        assertThrows(EntityNotFoundException.class, () -> {
-            matchService.getMatch("nonExistantMatch2");
-        });
-        assertThrows(EntityNotFoundException.class, () -> {
-            matchService.getMatch("nonExistantMatch3");
-        });
+        assertThrows(EntityNotFoundException.class, () -> matchService.getMatch("nonExistantMatch"));
+        assertThrows(EntityNotFoundException.class, () -> matchService.getMatch("nonExistantMatch2"));
+        assertThrows(EntityNotFoundException.class, () -> matchService.getMatch("nonExistantMatch3"));
     }
 
     @Test

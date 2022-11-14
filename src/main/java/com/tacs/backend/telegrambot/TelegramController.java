@@ -95,8 +95,9 @@ public class TelegramController  implements TelegramMvcController {
     @BotRequest(value = "/statistics {statType:[\\S]+} {hours:[\\S]+}")
     public SendMessage getStatistics(@BotPathVariable("statType") String statType, @BotPathVariable("hours") String hours, Chat chat) {
 
-        int hoursInt = 0;
+        int hoursInt;
 
+        // Parse hours as int
         try {
             hoursInt = Integer.parseInt(hours);
         } catch (NumberFormatException e) {
